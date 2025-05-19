@@ -26,7 +26,7 @@ function App() {
       <Routes>
         <Route
           path="/"
-          element={<h1>Chào mừng đến phần mềm quản lý y tế học đường</h1>}
+          element={<h1>Phần mềm quản lý y tế học đường</h1>}
         />
         <Route path="/student-profile" element={<StudentProfile />} />
         <Route path="/vaccination-management" element={<VaccinationManagement />} />
