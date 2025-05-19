@@ -1,35 +1,40 @@
-import { useState } from 'react'
-import reactLogo from './assets/react.svg'
-import viteLogo from '/vite.svg'
-import './App.css'
+import React from "react";
+import { BrowserRouter as Router, Routes, Route, Link } from "react-router-dom";
+
+import StudentProfile from "./components/student/StudentProfile"; 
+import VaccinationManagement from "./pages/VaccinationManagement";
+import HealthCheckManagement from "./pages/HealthCheckManagement";
 
 function App() {
-  const [count, setCount] = useState(0)
-
   return (
-    <>
-      <div>
-        <a href="https://vite.dev" target="_blank">
-          <img src={viteLogo} className="logo" alt="Vite logo" />
-        </a>
-        <a href="https://react.dev" target="_blank">
-          <img src={reactLogo} className="logo react" alt="React logo" />
-        </a>
-      </div>
-      <h1>Vite + React</h1>
-      <div className="card">
-        <button onClick={() => setCount((count) => count + 1)}>
-          count is {count}
-        </button>
-        <p>
-          Edit <code>src/App.jsx</code> and save to test HMR
-        </p>
-      </div>
-      <p className="read-the-docs">
-        Click on the Vite and React logos to learn more
-      </p>
-    </>
-  )
+    <Router>
+      <nav style={{ padding: 10, borderBottom: "1px solid #ccc" }}>
+        <Link to="/" style={{ marginRight: 10 }}>
+          Trang chủ
+        </Link>
+        <Link to="/student-profile" style={{ marginRight: 10 }}>
+          Hồ sơ sức khỏe học sinh
+        </Link>
+        <Link to="/vaccination-management" style={{ marginRight: 10 }}>
+          Quản lý Tiêm chủng
+        </Link>
+        <Link to="/health-check-management" style={{ marginRight: 10 }}>
+          Kiểm tra sức khỏe định kỳ
+        </Link>
+      </nav>
+
+      <Routes>
+        <Route
+          path="/"
+          element={<h1>Chào mừng đến phần mềm quản lý y tế học đường</h1>}
+        />
+        <Route path="/student-profile" element={<StudentProfile />} />
+        <Route path="/vaccination-management" element={<VaccinationManagement />} />
+        <Route path="/health-check-management" element={<HealthCheckManagement />} />
+        {/* Nếu muốn, bạn có thể thêm route NotFound hoặc các route khác sau */}
+      </Routes>
+    </Router>
+  );
 }
 
-export default App
+export default App;
