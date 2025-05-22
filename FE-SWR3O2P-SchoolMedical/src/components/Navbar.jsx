@@ -15,20 +15,14 @@ export default function Navbar() {
       <Link to="/documents" style={{ marginRight: 10, color: "#fff" }}>
         Tài liệu học đường
       </Link>
-      {/* Thêm links từ nhánh feature/student-health-vaccine-checkup */}
+      {/* Các liên kết từ nhánh feature/student-health-vaccine-checkup */}
       <Link to="/student-profile" style={{ marginRight: 10, color: "#fff" }}>
         Hồ sơ sức khỏe học sinh
       </Link>
-      <Link
-        to="/vaccination-management"
-        style={{ marginRight: 10, color: "#fff" }}
-      >
+      <Link to="/vaccination-management" style={{ marginRight: 10, color: "#fff" }}>
         Quản lý Tiêm chủng
       </Link>
-      <Link
-        to="/health-check-management"
-        style={{ marginRight: 10, color: "#fff" }}
-      >
+      <Link to="/health-check-management" style={{ marginRight: 10, color: "#fff" }}>
         Kiểm tra sức khỏe định kỳ
       </Link>
     </nav>
