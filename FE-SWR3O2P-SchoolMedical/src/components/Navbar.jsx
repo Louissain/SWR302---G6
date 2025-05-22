@@ -85,113 +85,29 @@ export default function Navbar({ darkMode, toggleDarkMode }) {
   };
 
   return (
-    <nav className={`fixed w-full top-0 z-50 transition-all duration-300 ${scrolled ? 'bg-primary/95 backdrop-blur-sm shadow-nav py-2' : 'bg-primary py-4'} dark:bg-gray-800 dark:border-b dark:border-gray-700`}>
-      <div className="container-custom">
-        <div className="flex justify-between items-center">
-          <div className="flex items-center">
-            <Link to="/" className="flex items-center group">
-              <div className="relative overflow-hidden w-10 h-10 rounded-lg mr-3 bg-white p-1.5 transition-all duration-300 group-hover:bg-opacity-90">
-                <svg xmlns="http://www.w3.org/2000/svg" className="h-full w-full text-primary" viewBox="0 0 20 20" fill="currentColor">
-                  <path fillRule="evenodd" d="M3.172 5.172a4 4 0 015.656 0L10 6.343l1.172-1.171a4 4 0 115.656 5.656L10 17.657l-6.828-6.829a4 4 0 010-5.656z" clipRule="evenodd" />
-                </svg>
-              </div>
-              <div>
-                <span className="font-heading font-bold text-lg text-white">Y tế Học đường</span>
-                <span className="block text-xs text-white/80 -mt-1 font-light">School Medical System</span>
-              </div>
-            </Link>
-          </div>
-
-          {/* Desktop menu */}
-          <div className="hidden lg:flex items-center space-x-1">
-            {navLinks.map((link) => (
-              <Link
-                key={link.path}
-                to={link.path}
-                className={`nav-link flex items-center ${
-                  location.pathname === link.path ? "active" : ""
-                }`}
-              >
-                {getIcon(link.icon)}
-                <span>{link.label}</span>
-              </Link>
-            ))}
-            
-            {/* Dark mode toggle */}
-            <button
-              onClick={toggleDarkMode}
-              className="ml-3 p-2 rounded-lg text-white hover:bg-white/10 focus:outline-none transition-all duration-200"
-              aria-label="Toggle dark mode"
-            >
-              {darkMode ? (
-                <svg xmlns="http://www.w3.org/2000/svg" className="h-5 w-5" viewBox="0 0 20 20" fill="currentColor">
-                  <path fillRule="evenodd" d="M10 2a1 1 0 011 1v1a1 1 0 11-2 0V3a1 1 0 011-1zm4 8a4 4 0 11-8 0 4 4 0 018 0zm-.464 4.95l.707.707a1 1 0 001.414-1.414l-.707-.707a1 1 0 00-1.414 1.414zm2.12-10.607a1 1 0 010 1.414l-.706.707a1 1 0 11-1.414-1.414l.707-.707a1 1 0 011.414 0zM17 11a1 1 0 100-2h-1a1 1 0 100 2h1zm-7 4a1 1 0 011 1v1a1 1 0 11-2 0v-1a1 1 0 011-1zM5.05 6.464A1 1 0 106.465 5.05l-.708-.707a1 1 0 00-1.414 1.414l.707.707zm1.414 8.486l-.707.707a1 1 0 01-1.414-1.414l.707-.707a1 1 0 011.414 1.414zM4 11a1 1 0 100-2H3a1 1 0 000 2h1z" clipRule="evenodd" />
-                </svg>
-              ) : (
-                <svg xmlns="http://www.w3.org/2000/svg" className="h-5 w-5" viewBox="0 0 20 20" fill="currentColor">
-                  <path d="M17.293 13.293A8 8 0 016.707 2.707a8.001 8.001 0 1010.586 10.586z" />
-                </svg>
-              )}
-            </button>
-          </div>
-
-          {/* Mobile menu button */}
-          <div className="lg:hidden flex items-center space-x-3">
-            {/* Dark mode toggle - mobile */}
-            <button
-              onClick={toggleDarkMode}
-              className="p-2 rounded-lg text-white hover:bg-white/10 focus:outline-none transition-all duration-200"
-              aria-label="Toggle dark mode"
-            >
-              {darkMode ? (
-                <svg xmlns="http://www.w3.org/2000/svg" className="h-5 w-5" viewBox="0 0 20 20" fill="currentColor">
-                  <path fillRule="evenodd" d="M10 2a1 1 0 011 1v1a1 1 0 11-2 0V3a1 1 0 011-1zm4 8a4 4 0 11-8 0 4 4 0 018 0zm-.464 4.95l.707.707a1 1 0 001.414-1.414l-.707-.707a1 1 0 00-1.414 1.414zm2.12-10.607a1 1 0 010 1.414l-.706.707a1 1 0 11-1.414-1.414l.707-.707a1 1 0 011.414 0zM17 11a1 1 0 100-2h-1a1 1 0 100 2h1zm-7 4a1 1 0 011 1v1a1 1 0 11-2 0v-1a1 1 0 011-1zM5.05 6.464A1 1 0 106.465 5.05l-.708-.707a1 1 0 00-1.414 1.414l.707.707zm1.414 8.486l-.707.707a1 1 0 01-1.414-1.414l.707-.707a1 1 0 011.414 1.414zM4 11a1 1 0 100-2H3a1 1 0 000 2h1z" clipRule="evenodd" />
-                </svg>
-              ) : (
-                <svg xmlns="http://www.w3.org/2000/svg" className="h-5 w-5" viewBox="0 0 20 20" fill="currentColor">
-                  <path d="M17.293 13.293A8 8 0 016.707 2.707a8.001 8.001 0 1010.586 10.586z" />
-                </svg>
-              )}
-            </button>
-            
-            <button
-              type="button"
-              className="text-white hover:bg-white/10 p-2 rounded-lg focus:outline-none transition-all duration-200"
-              onClick={toggleMenu}
-            >
-              <span className="sr-only">Mở menu</span>
-              {isMenuOpen ? (
-                <svg xmlns="http://www.w3.org/2000/svg" className="h-6 w-6" fill="none" viewBox="0 0 24 24" stroke="currentColor">
-                  <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M6 18L18 6M6 6l12 12" />
-                </svg>
-              ) : (
-                <svg xmlns="http://www.w3.org/2000/svg" className="h-6 w-6" fill="none" viewBox="0 0 24 24" stroke="currentColor">
-                  <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M4 6h16M4 12h16m-7 6h7" />
-                </svg>
-              )}
-            </button>
-          </div>
-        </div>
-
-        {/* Mobile menu */}
-        {isMenuOpen && (
-          <div className="lg:hidden py-3 space-y-1 animate-fadeIn mt-3 bg-white/10 backdrop-blur-sm rounded-xl p-2">
-            {navLinks.map((link) => (
-              <Link
-                key={link.path}
-                to={link.path}
-                className={`flex items-center text-white px-3 py-2 rounded-lg text-base font-medium hover:bg-white/10 ${
-                  location.pathname === link.path ? "bg-white/20" : ""
-                }`}
-                onClick={() => setIsMenuOpen(false)}
-              >
-                {getIcon(link.icon)}
-                {link.label}
-              </Link>
-            ))}
-          </div>
-        )}
-      </div>
+    <nav style={{ padding: "1rem", background: "#1976d2", color: "#fff" }}>
+      <Link to="/" style={{ marginRight: 10, color: "#fff" }}>
+        Trang chủ
+      </Link>
+      <Link to="/about" style={{ marginRight: 10, color: "#fff" }}>
+        Giới thiệu
+      </Link>
+      <Link to="/blog" style={{ marginRight: 10, color: "#fff" }}>
+        Blog sức khỏe
+      </Link>
+      <Link to="/documents" style={{ marginRight: 10, color: "#fff" }}>
+        Tài liệu học đường
+      </Link>
+      {/* Các liên kết từ nhánh feature/student-health-vaccine-checkup */}
+      <Link to="/student-profile" style={{ marginRight: 10, color: "#fff" }}>
+        Hồ sơ sức khỏe học sinh
+      </Link>
+      <Link to="/vaccination-management" style={{ marginRight: 10, color: "#fff" }}>
+        Quản lý Tiêm chủng
+      </Link>
+      <Link to="/health-check-management" style={{ marginRight: 10, color: "#fff" }}>
+        Kiểm tra sức khỏe định kỳ
+      </Link>
     </nav>
   );
 }
