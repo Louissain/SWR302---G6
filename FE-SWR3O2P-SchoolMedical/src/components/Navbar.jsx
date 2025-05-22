@@ -25,6 +25,12 @@ export default function Navbar() {
       <Link to="/health-check-management" style={{ marginRight: 10, color: "#fff" }}>
         Kiểm tra sức khỏe định kỳ
       </Link>
+      <Link to="/health-check-management" style={{ marginRight: 10, color: "#fff" }}>
+        Kiểm tra sức khỏe định kỳ
+      </Link>
+      <Link to="/medical" style={{ marginRight: 10, color: "#fff" }}>
+        Thuốc và vật tư y tế
+      </Link>
     </nav>
   );
 }
