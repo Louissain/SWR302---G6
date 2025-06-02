@@ -6,7 +6,7 @@ import About from "./pages/About";
 import Blog from "./pages/Blog";
 import Documents from "./pages/Documents";
 import Medical from "./pages/Medical";
-import Login from "./pages/Login";
+import Loginn from "./pages/Login";
 
 // Import các component từ nhánh feature/student-health-vaccine-checkup
 import StudentProfile from "./components/student/StudentProfile"; 
