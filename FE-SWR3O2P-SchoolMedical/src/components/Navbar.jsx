@@ -108,6 +108,15 @@ export default function Navbar({ darkMode, toggleDarkMode }) {
       <Link to="/health-check-management" style={{ marginRight: 10, color: "#fff" }}>
         Kiểm tra sức khỏe định kỳ
       </Link>
+      <Link to="/health-check-management" style={{ marginRight: 10, color: "#fff" }}>
+        Kiểm tra sức khỏe định kỳ
+      </Link>
+      <Link to="/medical" style={{ marginRight: 10, color: "#fff" }}>
+        Thuốc và vật tư y tế
+      </Link>
+      <Link to="/login" style={{ marginRight: 30,color: "#fff" }}>
+        Đăng nhập
+      </Link>
     </nav>
   );
 }
