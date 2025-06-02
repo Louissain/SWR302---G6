@@ -27,8 +27,8 @@ function App() {
           <Route path="/student-profile" element={<StudentProfile />} />
           <Route path="/vaccination-management" element={<VaccinationManagement />} />
           <Route path="/health-check-management" element={<HealthCheckManagement />} />
-          
-          {/* Thêm các route khác nếu cần */} 
+          <Route path="/medical" element={<Medical />} /> {/* Route fallback cho các đường dẫn không hợp lệ */}
+           
         </Routes>
       </div>
     </BrowserRouter>
