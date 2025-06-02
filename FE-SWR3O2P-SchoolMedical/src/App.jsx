@@ -1,3 +1,4 @@
+import { useState, useEffect } from "react";
 import { BrowserRouter, Routes, Route } from "react-router-dom";
 import Navbar from "./components/Navbar";
 import Home from "./pages/Home";
@@ -13,6 +14,27 @@ import VaccinationManagement from "./pages/VaccinationManagement";
 import HealthCheckManagement from "./pages/HealthCheckManagement";  
 
 function App() {
+  const [darkMode, setDarkMode] = useState(localStorage.getItem("darkMode") === "true");
+  const [loaded, setLoaded] = useState(false);
+
+  useEffect(() => {
+    // Apply dark mode class to document root when state changes
+    if (darkMode) {
+      document.documentElement.classList.add("dark");
+      localStorage.setItem("darkMode", "true");
+    } else {
+      document.documentElement.classList.remove("dark");
+      localStorage.setItem("darkMode", "false");
+    }
+
+    // Add loaded class to body after components mount
+    setLoaded(true);
+  }, [darkMode]);
+
+  const toggleDarkMode = () => {
+    setDarkMode(!darkMode);
+  };
+
   return (
     <BrowserRouter>
       <Navbar />
@@ -22,15 +44,15 @@ function App() {
           <Route path="/about" element={<About />} />
           <Route path="/blog/*" element={<Blog />} />
           <Route path="/documents" element={<Documents />} />
-          <Route path="/medical" element={<Medical />} /> {/* Thêm route cho trang Medical */}
-          
-          {/* Thêm routes từ nhánh feature/student-health-vaccine-checkup */}
+          {/* Routes từ nhánh feature/student-health-vaccine-checkup */}
           <Route path="/student-profile" element={<StudentProfile />} />
           <Route path="/vaccination-management" element={<VaccinationManagement />} />
           <Route path="/health-check-management" element={<HealthCheckManagement />} />
           <Route path="/medical" element={<Medical />} /> {/* Route fallback cho các đường dẫn không hợp lệ */}
           <Route path="/login" element={<Login />} />
         
+          {/* Route từ nhánh feature/medicine-dashboard-report */}
+          <Route path="/medical" element={<Medical />} />
         </Routes>
       </div>
     </BrowserRouter>
