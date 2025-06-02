@@ -4,7 +4,8 @@ import Home from "./pages/Home";
 import About from "./pages/About";
 import Blog from "./pages/Blog";
 import Documents from "./pages/Documents";
-import Medical from "./pages/Medical"; // Import trang Medical
+import Medical from "./pages/Medical";
+import Login from "./pages/Login";
 
 // Import các component từ nhánh feature/student-health-vaccine-checkup
 import StudentProfile from "./components/student/StudentProfile"; 
@@ -28,7 +29,8 @@ function App() {
           <Route path="/vaccination-management" element={<VaccinationManagement />} />
           <Route path="/health-check-management" element={<HealthCheckManagement />} />
           <Route path="/medical" element={<Medical />} /> {/* Route fallback cho các đường dẫn không hợp lệ */}
-           
+          <Route path="/login" element={<Login />} />
+        
         </Routes>
       </div>
     </BrowserRouter>
