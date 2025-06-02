@@ -43,10 +43,12 @@ function App() {
           <Route path="/about" element={<About />} />
           <Route path="/blog/*" element={<Blog />} />
           <Route path="/documents" element={<Documents />} />
-          {/* Thêm routes từ nhánh feature/student-health-vaccine-checkup */}
+          {/* Routes từ nhánh feature/student-health-vaccine-checkup */}
           <Route path="/student-profile" element={<StudentProfile />} />
           <Route path="/vaccination-management" element={<VaccinationManagement />} />
           <Route path="/health-check-management" element={<HealthCheckManagement />} />
+          {/* Route từ nhánh feature/medicine-dashboard-report */}
+          <Route path="/medical" element={<Medical />} />
         </Routes>
       </div>
     </BrowserRouter>
