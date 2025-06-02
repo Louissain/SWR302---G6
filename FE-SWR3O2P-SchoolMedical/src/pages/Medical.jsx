@@ -55,7 +55,8 @@ export default function MedicalMedical() {
 
   return (
     <MedicalContainer>
-      <PageTitle level={2}>Quản lý Thuốc và Vật tư Y tế</PageTitle>
+      {/* Đã xoá dòng tiêu đề 'Quản lý Thuốc và Vật tư Y tế' */}
+      {/* <PageTitle level={2}>Quản lý Thuốc và Vật tư Y tế</PageTitle> */}
       
       {/* Remove the button that opens the modal */}
       {/* <Button type="primary" onClick={showModal} style={{ marginBottom: 20 }}>
