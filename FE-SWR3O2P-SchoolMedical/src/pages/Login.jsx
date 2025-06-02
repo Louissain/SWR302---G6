@@ -1,97 +1,157 @@
 import { useState } from 'react';
+import { Form, Input, Button, Typography, Card, Space, Checkbox } from 'antd';
+import { UserOutlined, LockOutlined, MailOutlined } from '@ant-design/icons';
+import styled from 'styled-components';
+
+const { Title, Text } = Typography;
+
+const Container = styled.div`
+  min-height: 100vh;
+  background: linear-gradient(to right bottom, #4facfe 0%, #00f2fe 100%); // Lighter blue gradient
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  padding: 20px;
+  overflow: auto; // Allow scrolling if content is too large
+`;
+
+const StyledCard = styled(Card)`
+  width: 100%;
+  max-width: 450px; // Increased max-width
+  border-radius: 12px; // More rounded corners
+  box-shadow: 0 12px 30px rgba(0, 0, 0, 0.25); // Stronger, softer shadow
+  padding: 30px; // Increased internal padding
+  text-align: center;
+  background-color: rgba(255, 255, 255, 0.95); // Slightly transparent white background
+  backdrop-filter: blur(5px); // Frosted glass effect
+`;
+
+const StyledTitle = styled(Title)`
+  margin-bottom: 30px !important; // More space below title
+  color: #1890ff; // Ant Design primary blue
+  font-weight: 700; // Bold title
+`;
+
+const StyledButton = styled(Button)`
+  margin-top: 20px; // More space above the button
+  border-radius: 25px; // More rounded button
+  height: 45px; // Increased height
+  font-size: 17px; // Slightly larger font size
+  font-weight: 600; // Semi-bold text
+  background: linear-gradient(to right, #1890ff 0%, #096dd9 100%); // Gradient button background
+  border: none; // No border
+  &:hover {
+    opacity: 0.9;
+  }
+`;
+
+const ToggleButton = styled(Button)`
+  padding: 0 !important;
+  height: auto !important;
+`;
 
 function Loginn() {
   const [isLogin, setIsLogin] = useState(true);
+  const [form] = Form.useForm();
 
-  const handleSubmit = (e) => {
-    e.preventDefault();
-    const formData = new FormData(e.target);
-    const data = Object.fromEntries(formData);
-    console.log(isLogin ? 'Login data:' : 'Register data:', data);
-    // Add your authentication logic here
+  const handleSubmit = (values) => {
+    console.log(isLogin ? 'Login data:' : 'Register data:', values);
+    // Add your authentication logic here (e.g., dispatching an action)
+    // On success, you might redirect the user:
+    // history.push('/dashboard'); // Assuming you have history available
   };
 
   return (
-    <div className="min-h-screen bg-gray-100 flex items-center justify-center">
-      <div className="bg-white p-8 rounded-lg shadow-lg w-full max-w-md">
-        <h2 className="text-2xl font-bold text-center mb-6">
+    <Container>
+      <StyledCard>
+        <StyledTitle level={2}>
           {isLogin ? 'Đăng Nhập' : 'Đăng Ký'}
-        </h2>
-        <form onSubmit={handleSubmit} className="space-y-4">
+        </StyledTitle>
+        
+        <Form
+          form={form}
+          name="login_register"
+          initialValues={{
+            remember: true,
+          }}
+          onFinish={handleSubmit}
+          layout="vertical"
+        >
           {!isLogin && (
-            <div>
-              <label htmlFor="name" className="block text-sm font-medium text-gray-700">
-                Họ và Tên
-              </label>
-              <input
-                type="text"
-                name="name"
-                id="name"
-                className="mt-1 block w-full p-2 border border-gray-300 rounded-md focus:outline-none focus:ring-2 focus:ring-blue-500"
-                placeholder="Nhập họ và tên"
-                required={!isLogin}
-              />
-            </div>
+            <Form.Item
+              name="name"
+              label="Họ và Tên"
+              rules={[
+                { required: true, message: 'Vui lòng nhập họ và tên!' },
+              ]}
+            >
+              <Input prefix={<UserOutlined className="site-form-item-icon" />} placeholder="Nhập họ và tên" size="large" />
+            </Form.Item>
           )}
-          <div>
-            <label htmlFor="email" className="block text-sm font-medium text-gray-700">
-              Email
-            </label>
-            <input
-              type="email"
-              name="email"
-              id="email"
-              className="mt-1 block w-full p-2 border border-gray-300 rounded-md focus:outline-none focus:ring-2 focus:ring-blue-500"
-              placeholder="Nhập email"
-              required
-            />
-          </div>
-          <div>
-            <label htmlFor="password" className="block text-sm font-medium text-gray-700">
-              Mật khẩu
-            </label>
-            <input
-              type="password"
-              name="password"
-              id="password"
-              className="mt-1 block w-full p-2 border border-gray-300 rounded-md focus:outline-none focus:ring-2 focus:ring-blue-500"
-              placeholder="Nhập mật khẩu"
-              required
-            />
-          </div>
-          {!isLogin && (
-            <div>
-              <label htmlFor="confirmPassword" className="block text-sm font-medium text-gray-700">
-                Xác nhận mật khẩu
-              </label>
-              <input
-                type="password"
-                name="confirmPassword"
-                id="confirmPassword"
-                className="mt-1 block w-full p-2 border border-gray-300 rounded-md focus:outline-none focus:ring-2 focus:ring-blue-500"
-                placeholder="Xác nhận mật khẩu"
-                required={!isLogin}
-              />
-            </div>
-          )}
-          <button
-            type="submit"
-            className="w-full bg-blue-600 text-white p-2 rounded-md hover:bg-blue-700 transition"
+          
+          <Form.Item
+            name="email"
+            label="Email"
+            rules={[
+              { required: true, message: 'Vui lòng nhập email của bạn!' },
+              { type: 'email', message: 'Email không hợp lệ!' },
+            ]}
           >
-            {isLogin ? 'Đăng Nhập' : 'Đăng Ký'}
-          </button>
-        </form>
-        <p className="mt-4 text-center text-sm text-gray-600">
+            <Input prefix={<MailOutlined className="site-form-item-icon" />} placeholder="Nhập email" size="large" />
+          </Form.Item>
+          
+          <Form.Item
+            name="password"
+            label="Mật khẩu"
+            rules={[
+              { required: true, message: 'Vui lòng nhập mật khẩu của bạn!' },
+            ]}
+          >
+            <Input.Password prefix={<LockOutlined className="site-form-item-icon" />} placeholder="Nhập mật khẩu" size="large" />
+          </Form.Item>
+          
+          {!isLogin && (
+            <Form.Item
+              name="confirmPassword"
+              label="Xác nhận mật khẩu"
+              dependencies={['password']}
+              rules={[
+                { required: true, message: 'Vui lòng xác nhận mật khẩu!' },
+                ({ getFieldValue }) => ({
+                  validator(_, value) {
+                    if (!value || getFieldValue('password') === value) {
+                      return Promise.resolve();
+                    }
+                    return Promise.reject(new Error('Mật khẩu xác nhận không khớp!'));
+                  }
+                })
+              ]}
+            >
+              <Input.Password prefix={<LockOutlined className="site-form-item-icon" />} placeholder="Xác nhận mật khẩu" size="large" />
+            </Form.Item>
+          )}
+          
+          {isLogin && (
+            <Form.Item name="remember" valuePropName="checked" noStyle>
+              <Checkbox>Nhớ đăng nhập</Checkbox>
+            </Form.Item>
+          )}
+
+          <Form.Item>
+            <StyledButton type="primary" htmlType="submit" block>
+              {isLogin ? 'Đăng Nhập' : 'Đăng Ký'}
+            </StyledButton>
+          </Form.Item>
+        </Form>
+        
+        <Text type="secondary">
           {isLogin ? 'Chưa có tài khoản?' : 'Đã có tài khoản?'}{' '}
-          <button
-            onClick={() => setIsLogin(!isLogin)}
-            className="text-blue-600 hover:underline"
-          >
+          <ToggleButton type="link" onClick={() => setIsLogin(!isLogin)}>
             {isLogin ? 'Đăng ký ngay' : 'Đăng nhập'}
-          </button>
-        </p>
-      </div>
-    </div>
+          </ToggleButton>
+        </Text>
+      </StyledCard>
+    </Container>
   );
 }
 
