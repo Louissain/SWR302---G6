@@ -11,7 +11,9 @@ import {
   FileTextOutlined,
   MedicineBoxOutlined,
   CalendarOutlined,
-  SafetyOutlined
+  SafetyOutlined,
+  FormOutlined,
+  SettingOutlined
 } from '@ant-design/icons';
 import styled from 'styled-components';
 
@@ -83,6 +85,7 @@ const getAntdIcon = (iconName) => {
     case "vaccine": return <SafetyOutlined />;
     case "calendar": return <CalendarOutlined />;
     case "medical": return <MedicineBoxOutlined />;
+    case "form": return <FormOutlined />;
     default: return null;
   }
 };
@@ -101,7 +104,7 @@ export default function Navbar() {
     window.location.href = '/login';
   };
 
-  const menu = (
+  const userDropdownMenu = (
     <Menu>
       {isLoggedIn ? (
         <StyledMenuItem key="logout" icon={<LogoutOutlined />} onClick={handleLogout}>
@@ -125,6 +128,17 @@ export default function Navbar() {
     </Menu>
   );
 
+  const medicalDropdownMenu = (
+    <Menu>
+      <Menu.Item key="/medical">
+        <Link to="/medical">Quản lý Thuốc và Vật tư Y tế</Link>
+      </Menu.Item>
+      <Menu.Item key="/submit-medication">
+        <Link to="/submit-medication">Form Gửi thuốc từ Phụ huynh</Link>
+      </Menu.Item>
+    </Menu>
+  );
+
   const navLinks = [
     { path: "/", label: "Trang chủ", icon: "home" },
     { path: "/about", label: "Giới thiệu", icon: "info" },
@@ -133,7 +147,6 @@ export default function Navbar() {
     { path: "/student-profile", label: "Hồ sơ sức khỏe học sinh", icon: "user" },
     { path: "/vaccination-management", label: "Quản lý Tiêm chủng", icon: "vaccine" },
     { path: "/health-check-management", label: "Kiểm tra sức khỏe định kỳ", icon: "calendar" },
-    { path: "/medical", label: "Thuốc và vật tư y tế", icon: "medical" },
   ];
 
   const selectedKeys = [location.pathname];
@@ -148,14 +161,17 @@ export default function Navbar() {
       
       <StyledMenu mode="horizontal" selectedKeys={selectedKeys}>
         {navLinks.map(link => (
-          <Menu.Item key={link.path} icon={getAntdIcon(link.icon)}>
-            <Link to={link.path}>{link.label}</Link>
-          </Menu.Item>
+           <Menu.Item key={link.path} icon={getAntdIcon(link.icon)}>
+              <Link to={link.path}>{link.label}</Link>
+           </Menu.Item>
         ))}
+        <Dropdown overlay={medicalDropdownMenu} trigger={['click']}>
+          <Menu.Item key="medical-dropdown" icon={getAntdIcon('medical')} />
+        </Dropdown>
       </StyledMenu>
 
       <RightContent>
-        <Dropdown overlay={menu} trigger={['click']}>
+        <Dropdown overlay={userDropdownMenu} trigger={['click']}>
           <a onClick={e => e.preventDefault()} style={{ color: 'white' }}>
              <Space size="small">
                <StyledAvatar size="default" icon={<UserOutlined />} />

@@ -1,4 +1,3 @@
-
 import { Link } from "react-router-dom";
 import { useState } from "react";
 
@@ -9,12 +8,14 @@ export default function MedicalList() {
       title: "Tổng số thuốc",
       count: 150,
       status: "Đang sử dụng",
+      source: "Kho nhà trường",
     },
     {
       id: 2,
       title: "Vật tư y tế",
       count: 75,
       status: "Còn trong kho",
+      source: "Kho nhà trường",
     },
     {
       id: 3,
@@ -22,6 +23,7 @@ export default function MedicalList() {
       count: 12,
       status: "Cần xử lý",
       warning: true,
+      source: "Kho nhà trường",
     },
     {
       id: 4,
@@ -29,6 +31,21 @@ export default function MedicalList() {
       count: 8,
       status: "Thiếu",
       warning: true,
+      source: "Kho nhà trường",
+    },
+    {
+      id: 5,
+      title: "Thuốc hạ sốt Paracetamol",
+      count: 5,
+      status: "Từ phụ huynh",
+      source: "Phụ huynh",
+    },
+    {
+      id: 6,
+      title: "Băng gạc y tế",
+      count: 10,
+      status: "Từ phụ huynh",
+      source: "Phụ huynh",
     },
   ]);
 
@@ -62,6 +79,11 @@ export default function MedicalList() {
               } hover:shadow-lg transition`}
             >
               <h3 className="text-lg font-semibold mb-2">{stat.title}</h3>
+              {stat.source && (
+                <p className="text-sm text-gray-600 mb-1">
+                  Nguồn: {stat.source}
+                </p>
+              )}
               <div className="text-2xl font-bold text-blue-600 mb-2">
                 {stat.count}
               </div>

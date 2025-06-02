@@ -9,6 +9,8 @@ import Medical from "./pages/Medical";
 import Loginn from "./pages/Login";
 // Import new DocumentDetail component
 import DocumentDetail from "./pages/DocumentDetail";
+// Import SubmitMedicationForm component
+import SubmitMedicationForm from "./pages/SubmitMedicationForm";
 
 // Import các component từ nhánh feature/student-health-vaccine-checkup
 import StudentProfile from "./components/student/StudentProfile"; 
@@ -57,6 +59,8 @@ function App() {
         
           {/* Route từ nhánh feature/medicine-dashboard-report */}
           <Route path="/medical" element={<Medical />} />
+          {/* New route for submit medication form */}
+          <Route path="/submit-medication" element={<SubmitMedicationForm />} />
         </Routes>
       </div>
     </BrowserRouter>

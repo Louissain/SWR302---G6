@@ -1,22 +1,28 @@
 import React, { useState } from 'react';
-import MedicalList from "../Components/MedicalList";
-import { Button, Typography, Modal, Form, Input, DatePicker, Select, message } from 'antd';
+import { Form, Input, Button, Typography, DatePicker, Select, Card, message } from 'antd';
 import styled from 'styled-components';
 import moment from 'moment';
 
 const { Title } = Typography;
-const { Option } = Select; // Keep if you plan to add select fields later
+const { Option } = Select;
 
-const MedicalContainer = styled.div`
+const FormContainer = styled.div`
   padding: 20px;
   background-color: #f0f2f5;
   min-height: calc(100vh - 64px); // Adjust based on your header height
 `;
 
+const FormCard = styled(Card)`
+  max-width: 600px;
+  margin: 20px auto;
+  box-shadow: 0 4px 12px rgba(0, 0, 0, 0.1);
+  border-radius: 8px;
+`;
+
 const PageTitle = styled(Title)`
   text-align: center;
-  margin-bottom: 20px !important;
-  color: #001f3f;
+  margin-bottom: 30px !important;
+  color: #001f3f; // Dark blue color
 `;
 
 const StyledFormItem = styled(Form.Item)`
@@ -26,51 +32,25 @@ const StyledFormItem = styled(Form.Item)`
   }
 `;
 
-export default function MedicalMedical() {
-  // Remove state and handlers related to modal
-  // const [isModalVisible, setIsModalVisible] = useState(false);
-  // const [form] = Form.useForm();
+const SubmitMedicationForm = () => {
+  const [form] = Form.useForm();
 
-  // const showModal = () => {
-  //   setIsModalVisible(true);
-  // };
+  const onFinish = (values) => {
+    console.log('Received values of form:', values);
+    // Here you would typically send this data to a backend API
+    message.success('Thông tin thuốc/vật tư y tế đã được gửi!');
+    form.resetFields();
+  };
 
-  // const handleCancel = () => {
-  //   setIsModalVisible(false);
-  //   form.resetFields();
-  // };
-
-  // const onFinish = (values) => {
-  //   console.log('Received values of form:', values);
-  //   // Here you would typically send this data to a backend API
-  //   message.success('Thông tin thuốc/vật tư y tế đã được gửi!');
-  //   form.resetFields();
-  //   setIsModalVisible(false);
-  // };
-
-  // const onFinishFailed = (errorInfo) => {
-  //   console.log('Failed:', errorInfo);
-  //   message.error('Vui lòng kiểm tra lại thông tin.');
-  // };
+  const onFinishFailed = (errorInfo) => {
+    console.log('Failed:', errorInfo);
+    message.error('Vui lòng kiểm tra lại thông tin.');
+  };
 
   return (
-    <MedicalContainer>
-      <PageTitle level={2}>Quản lý Thuốc và Vật tư Y tế</PageTitle>
-      
-      {/* Remove the button that opens the modal */}
-      {/* <Button type="primary" onClick={showModal} style={{ marginBottom: 20 }}>
-        Gửi Thông Tin Thuốc/Vật Tư Y Tế từ Phụ Huynh
-      </Button> */}
-
-      <MedicalList />
-
-      {/* Remove the modal component */}
-      {/* <Modal
-        title="Form Gửi Thông Tin Thuốc/Vật Tư Y Tế"
-        visible={isModalVisible}
-        onCancel={handleCancel}
-        footer={null} // Hide default footer buttons
-      >
+    <FormContainer>
+      <PageTitle level={2}>Form Gửi Thông Tin Thuốc/Vật Tư Y Tế từ Phụ Huynh</PageTitle>
+      <FormCard>
         <Form
           form={form}
           name="medication_submission"
@@ -139,8 +119,9 @@ export default function MedicalMedical() {
             </Button>
           </Form.Item>
         </Form>
-      </Modal> */}
-
-    </MedicalContainer>
+      </FormCard>
+    </FormContainer>
   );
-}
+};
+
+export default SubmitMedicationForm; 
