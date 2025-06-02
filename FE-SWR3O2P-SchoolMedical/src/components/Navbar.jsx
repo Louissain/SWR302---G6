@@ -147,6 +147,7 @@ export default function Navbar() {
     { path: "/student-profile", label: "Hồ sơ sức khỏe học sinh", icon: "user" },
     { path: "/vaccination-management", label: "Quản lý Tiêm chủng", icon: "vaccine" },
     { path: "/health-check-management", label: "Kiểm tra sức khỏe định kỳ", icon: "calendar" },
+    { path: "/event-management", label: "Quản lý sự kiện", icon: "form" },
   ];
 
   const selectedKeys = [location.pathname];

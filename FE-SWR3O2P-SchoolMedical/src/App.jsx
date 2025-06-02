@@ -16,6 +16,7 @@ import SubmitMedicationForm from "./pages/SubmitMedicationForm";
 import StudentProfile from "./components/student/StudentProfile"; 
 import VaccinationManagement from "./pages/VaccinationManagement";
 import HealthCheckManagement from "./pages/HealthCheckManagement";  
+import EventPage from "./pages/EventPage";
 
 function App() {
   const [darkMode, setDarkMode] = useState(localStorage.getItem("darkMode") === "true");
@@ -61,6 +62,7 @@ function App() {
           <Route path="/medical" element={<Medical />} />
           {/* New route for submit medication form */}
           <Route path="/submit-medication" element={<SubmitMedicationForm />} />
+          <Route path="/event-management" element={<EventPage />} />
         </Routes>
       </div>
     </BrowserRouter>

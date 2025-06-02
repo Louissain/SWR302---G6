@@ -1,7 +1,10 @@
 import React from 'react'
-import { Users, Syringe, Heart, Calendar, TrendingUp, AlertTriangle } from 'lucide-react'
+import { Users, Syringe, Heart, Calendar, TrendingUp, AlertTriangle, Activity } from 'lucide-react'
+import { useNavigate } from 'react-router-dom'
 
 const Dashboard = () => {
+  const navigate = useNavigate();
+
   const stats = [
     {
       title: 'Tổng số học sinh',
@@ -20,12 +23,12 @@ const Dashboard = () => {
       color: 'green'
     },
     {
-      title: 'Kiểm tra sức khỏe',
-      value: '856',
-      change: '+45',
+      title: 'Sự kiện y tế',
+      value: '15',
+      change: '+3',
       changeType: 'increase',
-      icon: Heart,
-      color: 'purple'
+      icon: Activity,
+      color: 'red'
     },
     {
       title: 'Cần theo dõi',
@@ -40,23 +43,38 @@ const Dashboard = () => {
   const recentActivities = [
     {
       id: 1,
+      type: 'event',
+      message: 'Học sinh Nguyễn Văn A bị sốt cao - Cần theo dõi',
+      time: '1 giờ trước'
+    },
+    {
+      id: 2,
       type: 'vaccination',
       message: 'Học sinh Nguyễn Văn A đã hoàn thành mũi tiêm COVID-19',
       time: '2 giờ trước'
     },
     {
-      id: 2,
+      id: 3,
       type: 'health-check',
       message: 'Kiểm tra sức khỏe định kỳ lớp 6A đã hoàn thành',
       time: '4 giờ trước'
     },
     {
-      id: 3,
+      id: 4,
       type: 'alert',
       message: 'Học sinh Trần Thị B cần tái khám mắt',
       time: '1 ngày trước'
     }
   ]
+
+  const handleQuickAction = (action) => {
+    switch(action) {
+      case 'event':
+        navigate('/event-management');
+        break;
+      // ... other cases
+    }
+  };
 
   return (
     <div className="space-y-6">
@@ -90,12 +108,14 @@ const Dashboard = () => {
                   stat.color === 'blue' ? 'bg-blue-100' :
                   stat.color === 'green' ? 'bg-green-100' :
                   stat.color === 'purple' ? 'bg-purple-100' :
+                  stat.color === 'red' ? 'bg-red-100' :
                   'bg-orange-100'
                 }`}>
                   <Icon size={24} className={`${
                     stat.color === 'blue' ? 'text-blue-600' :
                     stat.color === 'green' ? 'text-green-600' :
                     stat.color === 'purple' ? 'text-purple-600' :
+                    stat.color === 'red' ? 'text-red-600' :
                     'text-orange-600'
                   }`} />
                 </div>
@@ -116,6 +136,7 @@ const Dashboard = () => {
                 <div className={`w-2 h-2 rounded-full mt-2 ${
                   activity.type === 'vaccination' ? 'bg-green-500' :
                   activity.type === 'health-check' ? 'bg-blue-500' :
+                  activity.type === 'event' ? 'bg-red-500' :
                   'bg-orange-500'
                 }`} />
                 <div className="flex-1 min-w-0">
@@ -131,6 +152,13 @@ const Dashboard = () => {
         <div className="bg-white rounded-lg shadow-sm border border-gray-200 p-6">
           <h2 className="text-lg font-semibold text-gray-900 mb-4">Thao tác nhanh</h2>
           <div className="grid grid-cols-2 gap-4">
+            <button 
+              onClick={() => handleQuickAction('event')}
+              className="flex flex-col items-center p-4 border border-gray-200 rounded-lg hover:bg-gray-50 transition-colors"
+            >
+              <Activity size={24} className="text-red-600 mb-2" />
+              <span className="text-sm font-medium text-gray-900">Tạo sự kiện</span>
+            </button>
             <button className="flex flex-col items-center p-4 border border-gray-200 rounded-lg hover:bg-gray-50 transition-colors">
               <Users size={24} className="text-blue-600 mb-2" />
               <span className="text-sm font-medium text-gray-900">Thêm học sinh</span>
@@ -143,10 +171,6 @@ const Dashboard = () => {
               <Heart size={24} className="text-purple-600 mb-2" />
               <span className="text-sm font-medium text-gray-900">Kiểm tra sức khỏe</span>
             </button>
-            <button className="flex flex-col items-center p-4 border border-gray-200 rounded-lg hover:bg-gray-50 transition-colors">
-              <Calendar size={24} className="text-orange-600 mb-2" />
-              <span className="text-sm font-medium text-gray-900">Xem lịch hẹn</span>
-            </button>
           </div>
         </div>
       </div>
@@ -155,6 +179,18 @@ const Dashboard = () => {
       <div className="bg-white rounded-lg shadow-sm border border-gray-200 p-6">
         <h2 className="text-lg font-semibold text-gray-900 mb-4">Lịch sắp tới</h2>
         <div className="space-y-3">
+          <div className="flex items-center justify-between p-3 bg-red-50 rounded-lg">
+            <div className="flex items-center space-x-3">
+              <Activity className="text-red-600" size={20} />
+              <div>
+                <p className="font-medium text-gray-900">Kiểm tra sức khỏe sau tai nạn - Lớp 8C</p>
+                <p className="text-sm text-gray-600">Ngày 24/05/2025 - 10:00 AM</p>
+              </div>
+            </div>
+            <button className="text-red-600 hover:text-red-800 font-medium text-sm">
+              Chi tiết
+            </button>
+          </div>
           <div className="flex items-center justify-between p-3 bg-blue-50 rounded-lg">
             <div className="flex items-center space-x-3">
               <Calendar className="text-blue-600" size={20} />
