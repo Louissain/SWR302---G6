@@ -49,7 +49,7 @@ function App() {
           <Route path="/vaccination-management" element={<VaccinationManagement />} />
           <Route path="/health-check-management" element={<HealthCheckManagement />} />
           <Route path="/medical" element={<Medical />} /> {/* Route fallback cho các đường dẫn không hợp lệ */}
-          <Route path="/login" element={<Login />} />
+          <Route path="/login" element={<Loginn />} />
         
           {/* Route từ nhánh feature/medicine-dashboard-report */}
           <Route path="/medical" element={<Medical />} />

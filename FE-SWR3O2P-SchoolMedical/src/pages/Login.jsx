@@ -1,6 +1,6 @@
 import { useState } from 'react';
 
-function Login() {
+function Loginn() {
   const [isLogin, setIsLogin] = useState(true);
 
   const handleSubmit = (e) => {
@@ -95,4 +95,4 @@ function Login() {
   );
 }
 
-export default Login;
+export default Loginn;
