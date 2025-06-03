@@ -21,14 +21,16 @@ const { Header: AntHeader } = Layout;
 const { Text } = Typography;
 
 const StyledHeader = styled(AntHeader)`
-  background-color: #1890ff;
+  background: linear-gradient(90deg, #6dd5ed 0%, #2193b0 100%);
+  box-shadow: 0 2px 8px rgba(0,0,0,0.10);
+  /* border-bottom-left-radius: 16px; */
+  /* border-bottom-right-radius: 16px; */
   padding: 0 24px;
   display: flex;
   align-items: center;
   justify-content: space-between;
   height: 64px;
   line-height: 64px;
-  box-shadow: 0 2px 8px rgba(0, 0, 0, 0.15);
   z-index: 100;
 `;
 
@@ -45,12 +47,29 @@ const StyledMenu = styled(Menu)`
   background-color: transparent !important;
   .ant-menu-item {
     color: white !important;
+    transition: font-size 0.2s;
+    display: flex;
+    align-items: center;
     &:hover {
       color: #f0f2f5 !important;
+      transform: scale(1.08);
+      transition: transform 0.1s;
+      z-index: 1;
+    }
+    &:hover a {
+      text-decoration: underline;
+      text-underline-offset: 3px;
     }
     &.ant-menu-item-selected {
-      background-color: #096dd9 !important;
-      color: white !important;
+      background: rgba(255,255,255,0.18) !important;
+      color: #fff !important;
+      border-radius: 8px !important;
+    }
+    &.ant-menu-item-selected::after,
+    &::after,
+    &:hover::after,
+    &.ant-menu-item-active::after {
+      display: none !important;
     }
   }
 `;
@@ -141,7 +160,6 @@ export default function Navbar() {
 
   const navLinks = [
     { path: "/", label: "Trang chủ", icon: "home" },
-    { path: "/about", label: "Giới thiệu", icon: "info" },
     { path: "/blog", label: "Blog sức khỏe", icon: "book" },
     { path: "/documents", label: "Tài liệu học đường", icon: "document" },
     { path: "/student-profile", label: "Hồ sơ sức khỏe học sinh", icon: "user" },

@@ -6,13 +6,11 @@ import styled from 'styled-components';
 const { Title, Text } = Typography;
 
 const Container = styled.div`
-  min-height: 100vh;
-  background: linear-gradient(to right bottom, #4facfe 0%, #00f2fe 100%); // Lighter blue gradient
+  min-height: calc(100vh - 64px);
+  background: linear-gradient(to right bottom, #4facfe 0%, #00f2fe 100%);
   display: flex;
   align-items: center;
   justify-content: center;
-  padding: 20px;
-  overflow: auto; // Allow scrolling if content is too large
 `;
 
 const StyledCard = styled(Card)`
