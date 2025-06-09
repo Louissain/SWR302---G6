@@ -1,7 +1,9 @@
-import { useState } from 'react';
-import { Form, Input, Button, Typography, Card, Space, Checkbox } from 'antd';
+import { useState, useEffect } from 'react';
+import { useNavigate } from 'react-router-dom';
+import { Form, Input, Button, Typography, Card, Space, Checkbox, message } from 'antd';
 import { UserOutlined, LockOutlined, MailOutlined } from '@ant-design/icons';
 import styled from 'styled-components';
+import { validateLogin, registerUser } from '../data/mockData';
 
 const { Title, Text } = Typography;
 
@@ -49,14 +51,73 @@ const ToggleButton = styled(Button)`
 `;
 
 function Loginn() {
+  const navigate = useNavigate();
   const [isLogin, setIsLogin] = useState(true);
   const [form] = Form.useForm();
+  const [loading, setLoading] = useState(false);
 
-  const handleSubmit = (values) => {
-    console.log(isLogin ? 'Login data:' : 'Register data:', values);
-    // Add your authentication logic here (e.g., dispatching an action)
-    // On success, you might redirect the user:
-    // history.push('/dashboard'); // Assuming you have history available
+  // Kiểm tra trạng thái đăng nhập khi component mount
+  useEffect(() => {
+    const isLoggedIn = localStorage.getItem('isLoggedIn');
+    const currentUser = localStorage.getItem('currentUser');
+    
+    if (isLoggedIn === 'true' && currentUser) {
+      // Nếu đã đăng nhập, chuyển hướng đến trang profile
+      navigate('/profile', { replace: true });
+    }
+  }, [navigate]);
+
+  const handleSubmit = async (values) => {
+    setLoading(true);
+    
+    try {
+      if (isLogin) {
+        // Xử lý đăng nhập
+        const result = validateLogin(values.email, values.password);
+          if (result.success) {
+          message.success(`Đăng nhập thành công! Chào mừng ${result.user.name}`);
+          
+          // Lưu thông tin user vào localStorage
+          localStorage.setItem('currentUser', JSON.stringify(result.user));
+          localStorage.setItem('isLoggedIn', 'true');
+          
+          // Chuyển hướng đến trang profile sau 1 giây
+          setTimeout(() => {
+            navigate('/profile');
+          }, 1000);
+        } else {
+          message.error(result.message);
+        }
+      } else {
+        // Xử lý đăng ký
+        const registerData = {
+          name: values.name,
+          email: values.email,
+          password: values.password
+        };
+        
+        const result = registerUser(registerData);
+          if (result.success) {
+          message.success(`Đăng ký thành công! Chào mừng ${result.user.name}`);
+          
+          // Lưu thông tin user vào localStorage
+          localStorage.setItem('currentUser', JSON.stringify(result.user));
+          localStorage.setItem('isLoggedIn', 'true');
+          
+          // Chuyển hướng đến trang profile sau 1 giây
+          setTimeout(() => {
+            navigate('/profile');
+          }, 1000);
+        } else {
+          message.error(result.message);
+        }
+      }
+    } catch (error) {
+      message.error('Có lỗi xảy ra, vui lòng thử lại!');
+      console.error('Error:', error);
+    } finally {
+      setLoading(false);
+    }
   };
 
   return (

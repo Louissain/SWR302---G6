@@ -1,9 +1,21 @@
 import { useState } from 'react';
-import { Link } from 'react-router-dom';
+import { Link, useNavigate } from 'react-router-dom';
 import { motion } from 'framer-motion';
 
 export default function Home() {
+  const navigate = useNavigate();
   const [activeTab, setActiveTab] = useState('students');
+
+  const handleStartUsing = () => {
+    navigate('/login');
+  };
+
+  const handleLearnMore = () => {
+    const missionSection = document.getElementById('mission-section');
+    if (missionSection) {
+      missionSection.scrollIntoView({ behavior: 'smooth' });
+    }
+  };
 
   const features = [
     {
@@ -160,12 +172,17 @@ export default function Home() {
           <p className="text-lg md:text-xl mb-10 max-w-2xl text-white/90">
             Giải pháp toàn diện giúp nhà trường quản lý sức khỏe học sinh hiệu quả,
             kết nối giữa nhà trường, phụ huynh và các đơn vị y tế.
-          </p>
-          <div className="flex flex-wrap gap-4">
-            <button className="btn-primary px-8 py-3 rounded-lg font-medium text-white border border-white/20 backdrop-blur-sm bg-primary hover:bg-primary/90 transition-all shadow-lg transform hover:scale-105">
+          </p>          <div className="flex flex-wrap gap-4">
+            <button 
+              onClick={handleStartUsing}
+              className="btn-primary px-8 py-3 rounded-lg font-medium text-white border border-white/20 backdrop-blur-sm bg-primary hover:bg-primary/90 transition-all shadow-lg transform hover:scale-105"
+            >
               Bắt đầu sử dụng
             </button>
-            <button className="px-8 py-3 rounded-lg font-medium text-primary bg-white hover:bg-gray-100 transition-all shadow-lg transform hover:scale-105">
+            <button 
+              onClick={handleLearnMore}
+              className="px-8 py-3 rounded-lg font-medium text-primary bg-white hover:bg-gray-100 transition-all shadow-lg transform hover:scale-105"
+            >
               Tìm hiểu thêm
             </button>
           </div>
@@ -183,10 +200,8 @@ export default function Home() {
             </div>
           ))}
         </div>
-      </section>
-
-      {/* Sứ mệnh của chúng tôi */}
-      <section className="relative overflow-hidden mb-16 w-full" style={{backgroundImage: "url('https://duhocisa.edu.vn/wp-content/uploads/2019/10/800nurse-walking-png-18.png')", backgroundSize: 'contain', backgroundRepeat: 'no-repeat', backgroundPosition: 'center', minHeight: '700px', imageRendering: 'auto'}}>
+      </section>      {/* Sứ mệnh của chúng tôi */}
+      <section id="mission-section" className="relative overflow-hidden mb-16 w-full" style={{backgroundImage: "url('https://duhocisa.edu.vn/wp-content/uploads/2019/10/800nurse-walking-png-18.png')", backgroundSize: 'contain', backgroundRepeat: 'no-repeat', backgroundPosition: 'center', minHeight: '700px', imageRendering: 'auto'}}>
         <div className="absolute inset-0 bg-gradient-to-l from-white/80 via-white/60 to-transparent"></div>
         <div className="relative z-10 flex flex-col items-end justify-center h-full min-h-[400px] pr-16 py-16 text-right">
           <div className="max-w-xl">

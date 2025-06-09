@@ -111,39 +111,77 @@ const getAntdIcon = (iconName) => {
 
 export default function Navbar() {
   const [isLoggedIn, setIsLoggedIn] = useState(false);
+  const [currentUser, setCurrentUser] = useState(null);
   const location = useLocation();
 
-  const handleLogout = () => {
-    console.log('Logging out...');
-    setIsLoggedIn(false);
-  };
+  // Kiểm tra trạng thái đăng nhập khi component mount
+  useEffect(() => {
+    const checkLoginStatus = () => {
+      const loggedIn = localStorage.getItem('isLoggedIn') === 'true';
+      const userData = localStorage.getItem('currentUser');
+      
+      setIsLoggedIn(loggedIn);
+      
+      if (loggedIn && userData) {
+        try {
+          setCurrentUser(JSON.parse(userData));
+        } catch (error) {
+          console.error('Error parsing user data:', error);
+          setCurrentUser(null);
+        }
+      } else {
+        setCurrentUser(null);
+      }
+    };
 
-  const handleLoginRedirect = () => {
-    console.log('Redirecting to login page...');
+    checkLoginStatus();
+    
+    // Lắng nghe thay đổi trong localStorage
+    window.addEventListener('storage', checkLoginStatus);
+    
+    return () => {
+      window.removeEventListener('storage', checkLoginStatus);
+    };
+  }, []);
+
+  const handleLogout = () => {
+    localStorage.removeItem('currentUser');
+    localStorage.removeItem('isLoggedIn');
+    setIsLoggedIn(false);
+    setCurrentUser(null);
     window.location.href = '/login';
   };
 
-  const userDropdownMenu = (
+  const handleLoginRedirect = () => {
+    window.location.href = '/login';
+  };  const userDropdownMenu = (
     <Menu>
       {isLoggedIn ? (
-        <StyledMenuItem key="logout" icon={<LogoutOutlined />} onClick={handleLogout}>
-          Đăng xuất
-        </StyledMenuItem>
+        <>
+          <StyledMenuItem key="profile" icon={<UserOutlined />}>
+            <Link to="/profile" style={{ color: 'inherit', textDecoration: 'none' }}>
+              Thông tin cá nhân
+            </Link>
+          </StyledMenuItem>
+          <StyledMenuItem key="settings" icon={<SettingOutlined />}>
+            Cài đặt
+          </StyledMenuItem>
+          <Menu.Divider />
+          <StyledMenuItem key="logout" icon={<LogoutOutlined />} onClick={handleLogout}>
+            Đăng xuất
+          </StyledMenuItem>
+        </>
       ) : (
         <StyledMenuItem key="login" icon={<LoginOutlined />} onClick={handleLoginRedirect}>
           Đăng nhập
         </StyledMenuItem>
       )}
-      {isLoggedIn && (
-         <StyledMenuItem key="profile" icon={<UserOutlined />}>
-            Thông tin cá nhân
-         </StyledMenuItem>
-      )}
-       {isLoggedIn && (
-         <StyledMenuItem key="settings" icon={<SettingOutlined />}>
-            Cài đặt
-         </StyledMenuItem>
-      )}
+      <Menu.Divider />
+      <StyledMenuItem key="sample-data" icon={<InfoCircleOutlined />}>
+        <Link to="/sample-data" style={{ color: 'inherit', textDecoration: 'none' }}>
+          Dữ liệu mẫu
+        </Link>
+      </StyledMenuItem>
     </Menu>
   );
 
@@ -187,13 +225,16 @@ export default function Navbar() {
         <Dropdown overlay={medicalDropdownMenu} trigger={['click']}>
           <Menu.Item key="medical-dropdown" icon={getAntdIcon('medical')} />
         </Dropdown>
-      </StyledMenu>
-
-      <RightContent>
+      </StyledMenu>      <RightContent>
         <Dropdown overlay={userDropdownMenu} trigger={['click']}>
           <a onClick={e => e.preventDefault()} style={{ color: 'white' }}>
              <Space size="small">
                <StyledAvatar size="default" icon={<UserOutlined />} />
+               {isLoggedIn && currentUser && (
+                 <Text style={{ color: 'white', fontSize: '14px' }}>
+                   {currentUser.name}
+                 </Text>
+               )}
              </Space>
           </a>
         </Dropdown>
