@@ -104,10 +104,16 @@ const SampleDataHelper = () => {
         role="TEACHER"
         color="blue"
       />
+        <UserCard 
+        title="Phụ huynh 1 (Phạm Thị Lan)" 
+        data={quickLoginData.parent} 
+        role="PARENT"
+        color="orange"
+      />
       
       <UserCard 
-        title="Phụ huynh" 
-        data={quickLoginData.parent} 
+        title="Phụ huynh 2 (Nguyễn Văn Đức)" 
+        data={quickLoginData.parent2} 
         role="PARENT"
         color="orange"
       />
@@ -150,10 +156,16 @@ const SampleDataHelper = () => {
         role="TEACHER"
         color="blue"
       />
+        <UserCard 
+        title="Phụ huynh 1 (Phạm Thị Lan)" 
+        data={quickRegisterData.parent} 
+        role="PARENT"
+        color="orange"
+      />
       
       <UserCard 
-        title="Phụ huynh" 
-        data={quickRegisterData.parent} 
+        title="Phụ huynh 2 (Nguyễn Văn Đức)" 
+        data={quickRegisterData.parent2} 
         role="PARENT"
         color="orange"
       />
@@ -163,16 +175,32 @@ const SampleDataHelper = () => {
         data={quickRegisterData.doctor} 
         role="DOCTOR"
         color="purple"
-      />
+      />      <Divider />
+
+      <Title level={3}>👨‍👩‍👧‍👦 Thông tin con em của phụ huynh</Title>
+      
+      <Card title="Phụ huynh 1: Phạm Thị Lan" style={{ marginBottom: 16 }}>
+        <div style={{ display: 'flex', flexDirection: 'column', gap: '8px' }}>
+          <div><Text strong>Con 1:</Text> Phạm Minh Khang - Lớp 7A1 (Mã: HS001)</div>
+          <div><Text strong>Con 2:</Text> Phạm Thị Hoa - Lớp 6B2 (Mã: HS002)</div>
+        </div>
+      </Card>
+      
+      <Card title="Phụ huynh 2: Nguyễn Văn Đức" style={{ marginBottom: 16 }}>
+        <div style={{ display: 'flex', flexDirection: 'column', gap: '8px' }}>
+          <div><Text strong>Con 1:</Text> Nguyễn Minh Tuấn - Lớp 8A3 (Mã: HS003)</div>
+          <div><Text strong>Con 2:</Text> Nguyễn Thị Mai - Lớp 9B1 (Mã: HS004)</div>
+        </div>
+      </Card>
 
       <Divider />
 
-      <Card title="💡 Hướng dẫn sử dụng" style={{ marginTop: '20px' }}>
-        <ol>
+      <Card title="💡 Hướng dẫn sử dụng" style={{ marginTop: '20px' }}>        <ol>
           <li>Chọn tài khoản phù hợp với vai trò bạn muốn test</li>
           <li>Nhấn vào nút <CopyOutlined style={{ color: '#1890ff' }} /> để copy thông tin</li>
           <li>Paste vào form đăng nhập hoặc đăng ký</li>
           <li>Tất cả mật khẩu đều là: <Text code>123456789</Text> (trừ Admin: <Text code>admin123456</Text>)</li>
+          <li><Text strong>Đặc biệt:</Text> Khi đăng nhập bằng tài khoản phụ huynh, bạn có thể truy cập form gửi thuốc và chọn con em từ danh sách có sẵn</li>
         </ol>
       </Card>
     </div>

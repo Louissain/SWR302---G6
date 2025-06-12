@@ -16,6 +16,7 @@ import {
   SettingOutlined
 } from '@ant-design/icons';
 import styled from 'styled-components';
+import { useAuth } from '../hooks/useAuth';
 
 const { Header: AntHeader } = Layout;
 const { Text } = Typography;
@@ -110,51 +111,19 @@ const getAntdIcon = (iconName) => {
 };
 
 export default function Navbar() {
-  const [isLoggedIn, setIsLoggedIn] = useState(false);
-  const [currentUser, setCurrentUser] = useState(null);
   const location = useLocation();
-
-  // Kiểm tra trạng thái đăng nhập khi component mount
-  useEffect(() => {
-    const checkLoginStatus = () => {
-      const loggedIn = localStorage.getItem('isLoggedIn') === 'true';
-      const userData = localStorage.getItem('currentUser');
-      
-      setIsLoggedIn(loggedIn);
-      
-      if (loggedIn && userData) {
-        try {
-          setCurrentUser(JSON.parse(userData));
-        } catch (error) {
-          console.error('Error parsing user data:', error);
-          setCurrentUser(null);
-        }
-      } else {
-        setCurrentUser(null);
-      }
-    };
-
-    checkLoginStatus();
-    
-    // Lắng nghe thay đổi trong localStorage
-    window.addEventListener('storage', checkLoginStatus);
-    
-    return () => {
-      window.removeEventListener('storage', checkLoginStatus);
-    };
-  }, []);
+  const { isLoggedIn, currentUser, logout } = useAuth();
 
   const handleLogout = () => {
-    localStorage.removeItem('currentUser');
-    localStorage.removeItem('isLoggedIn');
-    setIsLoggedIn(false);
-    setCurrentUser(null);
-    window.location.href = '/login';
+    logout();
+    setTimeout(() => {
+      window.location.href = '/login';
+    }, 100);
   };
 
   const handleLoginRedirect = () => {
     window.location.href = '/login';
-  };  const userDropdownMenu = (
+  };const userDropdownMenu = (
     <Menu>
       {isLoggedIn ? (
         <>
