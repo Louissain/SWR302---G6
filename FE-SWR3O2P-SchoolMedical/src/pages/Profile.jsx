@@ -3,6 +3,7 @@ import { useNavigate } from 'react-router-dom';
 import { Card, Avatar, Button, Typography, Space, Divider, message, Row, Col } from 'antd';
 import { UserOutlined, LogoutOutlined, EditOutlined, MailOutlined, PhoneOutlined } from '@ant-design/icons';
 import styled from 'styled-components';
+import { useAuth } from '../hooks/useAuth';
 
 const { Title, Text } = Typography;
 
@@ -51,51 +52,34 @@ const StyledButton = styled(Button)`
 
 function Profile() {
   const navigate = useNavigate();
-  const [currentUser, setCurrentUser] = useState(null);
-  const [loading, setLoading] = useState(false);
+  const { isLoggedIn, currentUser, logout, loading } = useAuth();
+  const [isLoading, setIsLoading] = useState(false);
 
   useEffect(() => {
-    // Kiểm tra trạng thái đăng nhập
-    const isLoggedIn = localStorage.getItem('isLoggedIn');
-    const userData = localStorage.getItem('currentUser');
-    
-    if (isLoggedIn !== 'true' || !userData) {
+    if (!loading && (!isLoggedIn || !currentUser)) {
       // Nếu chưa đăng nhập, chuyển hướng về trang login
       message.warning('Vui lòng đăng nhập để truy cập trang này');
       navigate('/login', { replace: true });
-      return;
     }
-    
-    try {
-      const user = JSON.parse(userData);
-      setCurrentUser(user);
-    } catch (error) {
-      console.error('Error parsing user data:', error);
-      message.error('Có lỗi xảy ra khi tải thông tin người dùng');
-      navigate('/login', { replace: true });
-    }
-  }, [navigate]);
+  }, [isLoggedIn, currentUser, loading, navigate]);
 
   const handleLogout = () => {
-    setLoading(true);
-    
-    // Xóa thông tin đăng nhập
-    localStorage.removeItem('currentUser');
-    localStorage.removeItem('isLoggedIn');
+    setIsLoading(true);
     
     message.success('Đăng xuất thành công!');
     
+    logout();
+    
     setTimeout(() => {
       navigate('/login', { replace: true });
-      setLoading(false);
+      setIsLoading(false);
     }, 1000);
   };
 
   const handleEditProfile = () => {
     message.info('Tính năng chỉnh sửa hồ sơ sẽ được phát triển trong tương lai');
   };
-
-  if (!currentUser) {
+  if (loading || !currentUser) {
     return null;
   }
 
@@ -186,12 +170,11 @@ function Profile() {
                 >
                   Chỉnh sửa hồ sơ
                 </StyledButton>
-                
-                <StyledButton 
+                  <StyledButton 
                   danger 
                   icon={<LogoutOutlined />} 
                   block
-                  loading={loading}
+                  loading={isLoading}
                   onClick={handleLogout}
                 >
                   Đăng xuất

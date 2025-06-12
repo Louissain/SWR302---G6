@@ -4,6 +4,7 @@ import { Form, Input, Button, Typography, Card, Space, Checkbox, message } from 
 import { UserOutlined, LockOutlined, MailOutlined } from '@ant-design/icons';
 import styled from 'styled-components';
 import { validateLogin, registerUser } from '../data/mockData';
+import { useAuth } from '../hooks/useAuth';
 
 const { Title, Text } = Typography;
 
@@ -55,35 +56,29 @@ function Loginn() {
   const [isLogin, setIsLogin] = useState(true);
   const [form] = Form.useForm();
   const [loading, setLoading] = useState(false);
-
+  const { isLoggedIn, login } = useAuth();
   // Kiểm tra trạng thái đăng nhập khi component mount
   useEffect(() => {
-    const isLoggedIn = localStorage.getItem('isLoggedIn');
-    const currentUser = localStorage.getItem('currentUser');
-    
-    if (isLoggedIn === 'true' && currentUser) {
-      // Nếu đã đăng nhập, chuyển hướng đến trang profile
-      navigate('/profile', { replace: true });
+    if (isLoggedIn) {
+      // Nếu đã đăng nhập, chuyển hướng đến trang chủ
+      navigate('/', { replace: true });
     }
-  }, [navigate]);
+  }, [isLoggedIn, navigate]);
 
   const handleSubmit = async (values) => {
     setLoading(true);
-    
-    try {
+      try {
       if (isLogin) {
         // Xử lý đăng nhập
-        const result = validateLogin(values.email, values.password);
-          if (result.success) {
+        const result = validateLogin(values.email, values.password);        if (result.success) {
           message.success(`Đăng nhập thành công! Chào mừng ${result.user.name}`);
           
-          // Lưu thông tin user vào localStorage
-          localStorage.setItem('currentUser', JSON.stringify(result.user));
-          localStorage.setItem('isLoggedIn', 'true');
+          // Sử dụng login function từ useAuth hook
+          login(result.user);
           
-          // Chuyển hướng đến trang profile sau 1 giây
+          // Chuyển hướng đến trang chủ sau 1 giây
           setTimeout(() => {
-            navigate('/profile');
+            navigate('/');
           }, 1000);
         } else {
           message.error(result.message);
@@ -96,17 +91,15 @@ function Loginn() {
           password: values.password
         };
         
-        const result = registerUser(registerData);
-          if (result.success) {
+        const result = registerUser(registerData);        if (result.success) {
           message.success(`Đăng ký thành công! Chào mừng ${result.user.name}`);
           
-          // Lưu thông tin user vào localStorage
-          localStorage.setItem('currentUser', JSON.stringify(result.user));
-          localStorage.setItem('isLoggedIn', 'true');
+          // Sử dụng login function từ useAuth hook
+          login(result.user);
           
-          // Chuyển hướng đến trang profile sau 1 giây
+          // Chuyển hướng đến trang chủ sau 1 giây
           setTimeout(() => {
-            navigate('/profile');
+            navigate('/');
           }, 1000);
         } else {
           message.error(result.message);

@@ -36,8 +36,7 @@ export const mockUsers = [
     address: "789 Trần Hưng Đạo, Quận 1, TP.HCM",
     class: "7A1"
   },
-  
-  // Tài khoản cho Phụ huynh
+    // Tài khoản cho Phụ huynh 1
   {
     id: 4,
     name: "Phạm Thị Lan",
@@ -51,6 +50,34 @@ export const mockUsers = [
         name: "Phạm Minh Khang",
         class: "7A1",
         studentId: "HS001"
+      },
+      {
+        name: "Phạm Thị Hoa",
+        class: "6B2",
+        studentId: "HS002"
+      }
+    ]
+  },
+
+  // Tài khoản cho Phụ huynh 2
+  {
+    id: 7,
+    name: "Nguyễn Văn Đức",
+    email: "phuhuynh2@gmail.com",
+    password: "123456789",
+    role: "parent",
+    phone: "0901234573",
+    address: "456 Lý Tự Trọng, Quận 1, TP.HCM",
+    children: [
+      {
+        name: "Nguyễn Minh Tuấn",
+        class: "8A3",
+        studentId: "HS003"
+      },
+      {
+        name: "Nguyễn Thị Mai",
+        class: "9B1",
+        studentId: "HS004"
       }
     ]
   },
@@ -105,11 +132,18 @@ export const quickRegisterData = {
     password: "123456789",
     confirmPassword: "123456789"
   },
-  
-  // Dữ liệu cho Phụ huynh
+    // Dữ liệu cho Phụ huynh 1
   parent: {
     name: "Phạm Thị Lan",
     email: "phuhuynh@gmail.com",
+    password: "123456789",
+    confirmPassword: "123456789"
+  },
+
+  // Dữ liệu cho Phụ huynh 2
+  parent2: {
+    name: "Nguyễn Văn Đức",
+    email: "phuhuynh2@gmail.com",
     password: "123456789",
     confirmPassword: "123456789"
   },
@@ -142,10 +176,15 @@ export const quickLoginData = {
     email: "giaovien@truonghoc.edu.vn",
     password: "123456789"
   },
-  
-  // Đăng nhập Phụ huynh
+    // Đăng nhập Phụ huynh 1
   parent: {
     email: "phuhuynh@gmail.com",
+    password: "123456789"
+  },
+
+  // Đăng nhập Phụ huynh 2
+  parent2: {
+    email: "phuhuynh2@gmail.com",
     password: "123456789"
   },
   
@@ -185,4 +224,16 @@ export const registerUser = (userData) => {
   
   mockUsers.push(newUser);
   return { success: true, user: newUser };
+};
+
+// Hàm tiện ích để lấy danh sách con của phụ huynh
+export const getChildrenByParentId = (parentId) => {
+  const parent = mockUsers.find(user => user.id === parentId && user.role === "parent");
+  return parent ? parent.children : [];
+};
+
+// Hàm tiện ích để lấy danh sách con của phụ huynh theo email
+export const getChildrenByParentEmail = (parentEmail) => {
+  const parent = mockUsers.find(user => user.email === parentEmail && user.role === "parent");
+  return parent ? parent.children : [];
 };
