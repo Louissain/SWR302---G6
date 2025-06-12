@@ -14,6 +14,8 @@ import DocumentDetail from "./pages/DocumentDetail";
 import SubmitMedicationForm from "./pages/SubmitMedicationForm";
 // Import SampleDataHelper component
 import SampleDataHelper from "./components/SampleDataHelper";
+// Import MedicineDetails component
+import MedicineDetails from "./Components/MedicineDetails";
 
 // Import các component từ nhánh feature/student-health-vaccine-checkup
 import StudentProfile from "./components/student/StudentProfile"; 
@@ -66,6 +68,8 @@ function App() {
           {/* New route for submit medication form */}
           <Route path="/submit-medication" element={<SubmitMedicationForm />} />
           <Route path="/event-management" element={<EventPage />} />
+          {/* New route for medicine details */}
+          <Route path="/medicine-details/:id" element={<MedicineDetails />} />
         </Routes>
       </div>
     </BrowserRouter>
