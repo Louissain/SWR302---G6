@@ -213,14 +213,6 @@ export default function Blog() {
                       src={post.imageUrl}
                       className="w-full h-full object-cover transition-transform duration-300 ease-in-out hover:scale-110"
                     />
-                    <Badge
-                      count={post.views}
-                      className="absolute top-4 right-4"
-                      style={{ backgroundColor: '#4a90e2', padding: '4px 10px', borderRadius: '999px', boxShadow: '0 2px 8px rgba(0,0,0,0.1)' }}
-                      title="Lượt xem"
-                    >
-                      <EyeOutlined className="text-white text-lg" />
-                    </Badge>
                   </div>
                 }
               >
