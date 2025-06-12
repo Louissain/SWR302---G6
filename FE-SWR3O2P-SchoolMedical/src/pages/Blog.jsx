@@ -1,161 +1,289 @@
 import { useParams } from 'react-router-dom';
-import { Card, Typography, Divider, Space, Button } from 'antd';
-import styled from 'styled-components';
+import { Card, Typography, Divider, Space, Button, Tag, Row, Col, Input, Rate, Avatar, Tooltip, Badge } from 'antd';
+import { 
+  ArrowLeftOutlined, 
+  SearchOutlined, 
+  CalendarOutlined, 
+  UserOutlined, 
+  TagOutlined,
+  LikeOutlined,
+  MessageOutlined,
+  ShareAltOutlined,
+  EyeOutlined,
+  BookOutlined,
+  HeartOutlined,
+  StarOutlined
+} from '@ant-design/icons';
 import BlogList from '../components/BlogList';
-import { ArrowLeftOutlined } from '@ant-design/icons';
+import { blogCategories, featuredPosts, fullBlogPosts } from '../data/blogPosts';
 
-const { Title, Text } = Typography;
+const { Title, Text, Paragraph } = Typography;
+const { Search } = Input;
 
-// Assume a more complete data structure for individual blog posts
-// In a real app, you would fetch this data based on the ID
-const fullBlogPosts = [
-  {
-    id: '1',
-    title: '5 cách phòng tránh bệnh học đường',
-    imageUrl: 'https://via.placeholder.com/700x300?text=Hinh+minh+hoa',
-    author: 'Admin',
-    date: '01/06/2024',
-    content: [
-      { type: 'paragraph', text: 'Bệnh học đường là các bệnh phổ biến ở lứa tuổi học sinh, thường liên quan đến điều kiện học tập và sinh hoạt. Phòng tránh các bệnh này giúp các em có sức khỏe tốt để học tập và phát triển.' },
-      { type: 'heading', level: 4, text: '1. Rửa tay thường xuyên' },
-      { type: 'paragraph', text: 'Rửa tay bằng xà phòng và nước sạch là biện pháp đơn giản và hiệu quả nhất để phòng tránh nhiều bệnh truyền nhiễm, đặc biệt là các bệnh lây qua đường tiêu hóa và hô hấp.' },
-      { type: 'heading', level: 4, text: '2. Giữ gìn vệ sinh cá nhân' },
-      { type: 'paragraph', text: 'Đánh răng ít nhất 2 lần/ngày, tắm rửa hàng ngày, cắt móng tay móng chân gọn gàng giúp ngăn ngừa vi khuẩn phát triển và gây bệnh.' },
-      { type: 'heading', level: 4, text: '3. Không dùng chung đồ dùng cá nhân' },
-      { type: 'paragraph', text: 'Không dùng chung khăn mặt, bàn chải đánh răng, cốc uống nước... với người khác để tránh lây truyền các bệnh ngoài da hoặc bệnh lây qua đường nước bọt.' },
-      { type: 'heading', level: 4, text: '4. Không ăn uống ở nơi đông người, không đảm bảo vệ sinh' },
-      { type: 'paragraph', text: 'Hạn chế ăn uống tại những nơi không rõ nguồn gốc thực phẩm, không đảm bảo vệ sinh an toàn thực phẩm để tránh ngộ độc thực phẩm và các bệnh đường ruột.' },
-      { type: 'heading', level: 4, text: '5. Tiêm chủng đầy đủ theo lịch' },
-      { type: 'paragraph', text: 'Tiêm chủng đầy đủ các loại vaccine theo lịch của Bộ Y tế giúp tạo miễn dịch phòng ngừa các bệnh nguy hiểm như sởi, rubella, quai bị, thủy đậu, viêm gan B, v.v.' },
-      { type: 'paragraph', text: 'Bằng cách thực hiện tốt các biện pháp phòng tránh đơn giản này, học sinh có thể tự bảo vệ sức khỏe của mình và góp phần xây dựng môi trường học đường an toàn, lành mạnh.' },
-    ],
-  },
-   {
-    id: '2',
-    title: 'Dinh dưỡng hợp lý cho trẻ',
-    imageUrl: 'https://via.placeholder.com/700x300?text=Dinh+duong+cho+tre',
-    author: 'Chuyên gia Dinh dưỡng',
-    date: '10/05/2024',
-    content: [
-      { type: 'paragraph', text: 'Dinh dưỡng đóng vai trò cực kỳ quan trọng đối với sự phát triển toàn diện về thể chất và trí tuệ của trẻ em, đặc biệt là lứa tuổi học đường. Một chế độ ăn cân đối, đầy đủ chất dinh dưỡng giúp trẻ tăng trưởng tốt, nâng cao sức đề kháng và khả năng học tập.' },
-      { type: 'heading', level: 4, text: 'Các nhóm chất dinh dưỡng cần thiết:' },
-      { type: 'list', items: [
-        '**Protein:** Cần thiết cho sự phát triển cơ bắp, tế bào và hệ miễn dịch. Có nhiều trong thịt, cá, trứng, sữa, đậu đỗ.',
-        '**Carbohydrate:** Nguồn năng lượng chính cho cơ thể và não bộ. Chọn các loại carbohydrate phức tạp như gạo lứt, yến mạch, rau củ.',
-        '**Chất béo:** Quan trọng cho sự phát triển não bộ và hấp thu vitamin. Ưu tiên chất béo không bão hòa từ quả bơ, hạt, dầu ô liu.',
-        '**Vitamin và Khoáng chất:** Tham gia vào nhiều chức năng của cơ thể. Bổ sung từ đa dạng rau củ quả các màu sắc.',
-        '**Nước:** Cần thiết cho mọi hoạt động của cơ thể. Đảm bảo trẻ uống đủ nước hàng ngày.',
-      ]},
-      { type: 'heading', level: 4, text: 'Xây dựng thực đơn cân đối:' },
-       { type: 'paragraph', text: 'Một thực đơn hàng ngày cho trẻ cần đảm bảo đủ 4 nhóm thực phẩm chính: Nhóm chất đạm, nhóm chất bột đường, nhóm chất béo, nhóm vitamin và khoáng chất. Chia thành 3 bữa chính và 1-2 bữa phụ.' },
-      { type: 'heading', level: 4, text: 'Lời khuyên:' },
-       { type: 'list', items: [
-        'Khuyến khích trẻ ăn sáng đầy đủ.',
-        'Hạn chế đồ ăn nhanh, đồ ngọt, nước ngọt có gas.',
-        'Tạo không khí vui vẻ trong bữa ăn.',
-        'Cho trẻ tham gia vào việc chuẩn bị bữa ăn (nếu có thể).',
-        'Theo dõi cân nặng và chiều cao của trẻ định kỳ.',
-      ]},
-      { type: 'paragraph', text: 'Hãy xây dựng cho trẻ một thói quen ăn uống lành mạnh ngay từ nhỏ để tạo nền tảng vững chắc cho sức khỏe và tương lai của trẻ.' },
-    ],
-  },
-];
-
-const BlogDetailContainer = styled.div`
-  max-width: 800px;
-  margin: 20px auto;
-  padding: 20px;
-  background-color: #fff;
-  border-radius: 8px;
-  box-shadow: 0 4px 12px rgba(0, 0, 0, 0.1);
-`;
-
-const BlogImage = styled.img`
-  width: 100%;
-  height: auto; // Adjust height automatically
-  max-height: 400px; // Maximum height
-  object-fit: cover;
-  border-radius: 8px;
-  margin-bottom: 20px;
-`;
-
-const ContentSection = styled.div`
-  margin-top: 20px;
-  line-height: 1.7;
-
-  h4 {
-    margin-top: 16px;
-    margin-bottom: 8px;
-    color: #096dd9; // Darker blue for headings
-  }
-
-  p {
-    margin-bottom: 12px;
-  }
-
-  ul {
-    margin-bottom: 12px;
-    padding-left: 20px;
-  }
-
-   li {
-    margin-bottom: 8px;
-  }
-`;
-
-function Blog() {
+export default function Blog() {
   const { id } = useParams();
 
   if (id) {
-    // Existing logic to display a single blog post
-    const blogPost = fullBlogPosts.find(post => post.id === id);
-
-    if (!blogPost) {
-      return (
-        <BlogDetailContainer>
-          <Title level={3}>Không tìm thấy bài viết</Title>
-          <Text>Bài viết bạn đang tìm kiếm không tồn tại.</Text>
-        </BlogDetailContainer>
-      );
-    }
+    const post = fullBlogPosts.find(post => post.id === id);
+    if (!post) return <div className="p-8 text-center text-gray-600">Không tìm thấy bài viết</div>;
 
     return (
-      <BlogDetailContainer>
-        <Button type="link" icon={<ArrowLeftOutlined />} onClick={() => window.history.back()} style={{ marginBottom: 20 }}>
-          Quay lại Blog
+      <div className="max-w-4xl mx-auto p-6">
+        <Button 
+          icon={<ArrowLeftOutlined />} 
+          onClick={() => window.history.back()}
+          className="mb-6 hover:bg-blue-50"
+        >
+          Quay lại
         </Button>
-        <Title level={2} style={{ textAlign: 'center', marginBottom: 10 }}>{blogPost.title}</Title>
-        <Text type="secondary" style={{ display: 'block', textAlign: 'center', marginBottom: 20 }}>
-          Bởi {blogPost.author} vào ngày {blogPost.date}
-        </Text>
-        {blogPost.imageUrl && <BlogImage src={blogPost.imageUrl} alt={blogPost.title} />}
+        
+        <Card className="shadow-lg rounded-lg overflow-hidden">
+          <img 
+            src={post.imageUrl} 
+            alt={post.title}
+            className="w-full h-64 object-cover"
+          />
+          
+          <div className="p-6">
+            <div className="flex items-center gap-4 mb-4">
+              <Tag color="blue">{post.category}</Tag>
+              <span className="text-gray-500">
+                <CalendarOutlined className="mr-2" />
+                {post.date}
+              </span>
+              <span className="text-gray-500">
+                <UserOutlined className="mr-2" />
+                {post.author}
+              </span>
+              <span className="text-gray-500">
+                <EyeOutlined className="mr-2" />
+                {post.views} lượt xem
+              </span>
+              <span className="text-gray-500">
+                <BookOutlined className="mr-2" />
+                {post.readTime}
+              </span>
+            </div>
 
-        <ContentSection>
-          {blogPost.content.map((block, index) => {
-            if (block.type === 'paragraph') {
-              return <Text key={index}><div dangerouslySetInnerHTML={{ __html: block.text }} /></Text>;
-            }
-            if (block.type === 'heading') {
-              return <Title key={index} level={block.level}>{block.text}</Title>;
-            }
-            if (block.type === 'list') {
+            <Title level={2} className="text-3xl font-bold mb-4 text-gray-800">
+              {post.title}
+            </Title>
+
+            <div className="flex items-center gap-4 mb-6">
+              <Rate disabled defaultValue={post.rating} allowHalf />
+              <span className="text-gray-500">({post.rating})</span>
+              <div className="flex items-center gap-2">
+                <Button type="text" icon={<LikeOutlined />}>
+                  {post.likes}
+                </Button>
+                <Button type="text" icon={<MessageOutlined />}>
+                  {post.comments}
+                </Button>
+                <Button type="text" icon={<ShareAltOutlined />} />
+                <Button type="text" icon={<HeartOutlined />} />
+              </div>
+            </div>
+            
+            <Divider className="my-6" />
+            
+            <div className="prose prose-lg max-w-none">
+              {post.content.map((item, index) => {
+                if (item.type === 'paragraph') {
+                  return (
+                    <p key={index} className="mb-4 text-gray-700 leading-relaxed">
+                      {item.text}
+                    </p>
+                  );
+                }
+                if (item.type === 'heading') {
+                  return (
+                    <h4 key={index} className="text-xl font-semibold text-gray-800 mt-6 mb-4">
+                      {item.text}
+                    </h4>
+                  );
+                }
+                if (item.type === 'list') {
               return (
-                <ul key={index}>
-                  {block.items.map((item, itemIndex) => (
-                    <li key={itemIndex}><Text><div dangerouslySetInnerHTML={{ __html: item }} /></Text></li>
+                    <ul key={index} className="list-disc pl-6 mb-4">
+                      {item.items.map((listItem, listIndex) => (
+                        <li key={listIndex} className="text-gray-700 mb-2">
+                          {listItem}
+                        </li>
                   ))}
                 </ul>
               );
             }
             return null;
           })}
-        </ContentSection>
-      </BlogDetailContainer>
-    );
-  } else {
-    // Render BlogList when no ID is present
-    return <BlogList />;
-  }
-}
+            </div>
 
-export default Blog;
+            <Divider className="my-8" />
+
+            <div className="mb-8">
+              <Title level={4} className="text-xl font-bold mb-4">
+                Tags
+              </Title>
+              <div className="flex flex-wrap gap-2">
+                {post.tags.map((tag, index) => (
+                  <Tag key={index} color="blue">
+                    {tag}
+                  </Tag>
+                ))}
+              </div>
+            </div>
+
+            {post.relatedPosts && (
+              <div>
+                <Title level={4} className="text-xl font-bold mb-4">
+                  Bài viết liên quan
+                </Title>
+                <Row gutter={[16, 16]}>
+                  {post.relatedPosts.map(relatedPost => (
+                    <Col span={12} key={relatedPost.id}>
+                      <Card hoverable>
+                        <Title level={5} className="text-lg font-semibold">
+                          {relatedPost.title}
+                        </Title>
+                      </Card>
+                    </Col>
+                  ))}
+                </Row>
+              </div>
+            )}
+          </div>
+        </Card>
+      </div>
+    );
+  }
+
+  return (
+    <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 py-8 lg:py-12 font-sans bg-gray-50 min-h-screen">
+      <div className="text-center mb-16 pt-4 sm:pt-8 lg:pt-12">
+        <Title level={1} className="text-4xl sm:text-5xl lg:text-6xl font-extrabold mb-4 text-gray-900 leading-tight drop-shadow-sm">
+          Blog Sức khỏe Học đường
+        </Title>
+        <Text className="text-lg sm:text-xl text-gray-700 max-w-3xl mx-auto block leading-relaxed px-4">
+          Cập nhật thông tin, kiến thức và hướng dẫn chuyên sâu về chăm sóc sức khỏe toàn diện cho học sinh.
+        </Text>
+      </div>
+
+      {/* Search and Categories Section */}
+      <div className="mb-16 bg-white p-6 sm:p-8 rounded-2xl shadow-xl border border-gray-100">
+        <Row gutter={[24, 24]} align="middle" justify="center">
+          <Col xs={24} md={16} lg={14}>
+            <Search
+              placeholder="Tìm kiếm bài viết, ví dụ: Dinh dưỡng, tâm lý học..."
+              allowClear
+              enterButton={<SearchOutlined />}
+              size="large"
+              className="w-full rounded-lg overflow-hidden"
+            />
+          </Col>
+          <Col xs={24} md={8} lg={10}>
+            <div className="flex flex-wrap gap-3 justify-center md:justify-end mt-4 md:mt-0">
+              {blogCategories.map(category => (
+                <Tooltip key={category.id} title={category.description}>
+                  <Tag
+                    color={category.color}
+                    className="cursor-pointer hover:scale-105 transition-transform duration-200 ease-in-out text-base px-4 py-2 rounded-full shadow-sm hover:shadow-md"
+                  >
+                    <Space>
+                      {category.icon}
+                      <span>{category.name}</span>
+                    </Space>
+                  </Tag>
+                </Tooltip>
+              ))}
+            </div>
+          </Col>
+        </Row>
+      </div>
+
+      {/* Featured Posts Section */}
+      <div className="mb-16">
+        <Title level={3} className="text-3xl sm:text-4xl font-bold mb-10 text-gray-800 text-center">
+          Bài viết nổi bật
+        </Title>
+        <Row gutter={[24, 24]} justify="center">
+          {featuredPosts.map(post => (
+            <Col xs={24} sm={12} lg={8} key={post.id}>
+              <Card
+                hoverable
+                className="h-full rounded-2xl shadow-xl overflow-hidden transition-all duration-300 ease-in-out hover:shadow-2xl hover:-translate-y-2 border border-gray-100"
+                cover={
+                  <div className="relative w-full h-56 bg-gray-100 overflow-hidden">
+                    <img
+                      alt={post.title}
+                      src={post.imageUrl}
+                      className="w-full h-full object-cover transition-transform duration-300 ease-in-out hover:scale-110"
+                    />
+                    <Badge
+                      count={post.views}
+                      className="absolute top-4 right-4"
+                      style={{ backgroundColor: '#4a90e2', padding: '4px 10px', borderRadius: '999px', boxShadow: '0 2px 8px rgba(0,0,0,0.1)' }}
+                      title="Lượt xem"
+                    >
+                      <EyeOutlined className="text-white text-lg" />
+                    </Badge>
+                  </div>
+                }
+              >
+                <div className="p-6">
+                  <div className="flex items-center justify-between flex-wrap gap-2 mb-3">
+                    <Tooltip title={post.category}>
+                      <Tag color="blue" className="text-sm px-4 py-1 rounded-full font-medium shadow-sm">
+                        {post.category}
+                      </Tag>
+                    </Tooltip>
+                    <Space className="text-gray-500 text-sm">
+                      <CalendarOutlined />
+                      <span>{post.date}</span>
+                    </Space>
+                  </div>
+                  <Title level={4} className="text-xl sm:text-2xl font-bold mb-3 line-clamp-2 text-gray-800 leading-snug">
+                    {post.title}
+                  </Title>
+                  <Text className="text-gray-600 block mb-4 line-clamp-3 leading-relaxed">
+                    {post.excerpt}
+                  </Text>
+                  <div className="flex items-center justify-between flex-wrap gap-2 border-t pt-4 border-gray-100">
+                    <div className="flex items-center text-gray-700 text-base">
+                      <Avatar size="small" icon={<UserOutlined />} className="mr-2 bg-blue-100 text-blue-600" />
+                      <span>{post.author}</span>
+                    </div>
+                    <div className="flex items-center gap-2">
+                      <Rate disabled defaultValue={post.rating} allowHalf className="text-yellow-500 text-lg" />
+                      <span className="text-gray-600 text-sm">({post.rating})</span>
+                    </div>
+                  </div>
+                  <Divider className="my-4" />
+                  <Space size="large" className="w-full justify-between flex-wrap">
+                    <Button type="text" icon={<LikeOutlined />} className="text-gray-600 hover:text-blue-500 transition-colors duration-200">
+                      {post.likes}
+                    </Button>
+                    <Button type="text" icon={<MessageOutlined />} className="text-gray-600 hover:text-blue-500 transition-colors duration-200">
+                      {post.comments}
+                    </Button>
+                    <Tooltip title="Thời gian đọc">
+                      <Button type="text" icon={<BookOutlined />} className="text-gray-600 hover:text-blue-500 transition-colors duration-200">
+                        {post.readTime}
+                      </Button>
+                    </Tooltip>
+                  </Space>
+                </div>
+              </Card>
+            </Col>
+          ))}
+        </Row>
+      </div>
+
+      {/* All Blog Posts Section */}
+      <div className="mb-16">
+        <Title level={3} className="text-3xl sm:text-4xl font-bold mb-10 text-gray-800 text-center">
+          Tất cả Bài viết
+        </Title>
+        <BlogList />
+      </div>
+    </div>
+  );
+}

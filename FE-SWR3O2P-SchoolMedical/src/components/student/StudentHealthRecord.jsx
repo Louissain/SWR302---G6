@@ -13,48 +13,20 @@ import {
   HeartOutlined,
   SafetyOutlined
 } from "@ant-design/icons";
-import styled from "styled-components";
 
 const { Title, Text } = Typography;
-
-const StyledCard = styled(Card)`
-  box-shadow: 0 4px 8px rgba(0, 0, 0, 0.1);
-  border-radius: 8px;
-  transition: all 0.3s ease;
-  
-  &:hover {
-    box-shadow: 0 6px 12px rgba(0, 0, 0, 0.15);
-    transform: translateY(-2px);
-  }
-`;
-
-const HeaderSection = styled.div`
-  text-align: center;
-  padding: 24px 0;
-  background: linear-gradient(135deg, #1890ff 0%, #096dd9 100%);
-  border-radius: 8px 8px 0 0;
-  margin: -24px -24px 24px -24px;
-  color: white;
-`;
-
-const IconWrapper = styled.div`
-  font-size: 48px;
-  margin-bottom: 16px;
-  color: white;
-`;
-
-const StatusTag = styled(Tag)`
-  padding: 4px 8px;
-  border-radius: 4px;
-  font-weight: 500;
-`;
 
 function StudentHealthRecord({ student }) {
   if (!student) {
     return (
-      <StyledCard style={{ maxWidth: 800, margin: "auto", padding: 20 }}>
-        <Text type="secondary">Vui lòng chọn học sinh để xem hồ sơ sức khỏe.</Text>
-      </StyledCard>
+      <div className="max-w-4xl mx-auto p-6">
+        <Card className="shadow-lg rounded-lg">
+          <div className="text-center text-gray-500 py-8">
+            <UserOutlined className="text-4xl mb-4" />
+            <p>Vui lòng chọn học sinh để xem hồ sơ sức khỏe.</p>
+          </div>
+        </Card>
+      </div>
     );
   }
 
@@ -78,190 +50,142 @@ function StudentHealthRecord({ student }) {
     ? (healthChecks.filter(h => h.result === "Bình thường").length / healthChecks.length) * 100
     : 0;
 
-  const basicInfoColumns = [
-    {
-      title: "Thông tin",
-      dataIndex: "label",
-      key: "label",
-      width: "30%",
-    },
-    {
-      title: "Chi tiết",
-      dataIndex: "value",
-      key: "value",
-    },
-  ];
-
-  const basicInfoData = [
-    {
-      key: "1",
-      label: <Space><CalendarOutlined /> Ngày sinh</Space>,
-      value: dob || "Chưa cập nhật",
-    },
-    {
-      key: "2",
-      label: <Space><MedicineBoxOutlined /> Dị ứng</Space>,
-      value: allergies ? <StatusTag color="red" icon={<WarningOutlined />}>{allergies}</StatusTag> : "Không có",
-    },
-    {
-      key: "3",
-      label: <Space><MedicineBoxOutlined /> Bệnh mãn tính</Space>,
-      value: chronicDiseases ? <StatusTag color="orange" icon={<WarningOutlined />}>{chronicDiseases}</StatusTag> : "Không có",
-    },
-    {
-      key: "4",
-      label: <Space><EyeOutlined /> Thị lực</Space>,
-      value: vision || "Chưa cập nhật",
-    },
-    {
-      key: "5",
-      label: <Space><SoundOutlined /> Thính lực</Space>,
-      value: hearing || "Chưa cập nhật",
-    },
-  ];
-
-  const vaccinationColumns = [
-    {
-      title: "Tên vaccine",
-      dataIndex: "vaccineName",
-      key: "vaccineName",
-    },
-    {
-      title: "Ngày tiêm",
-      dataIndex: "date",
-      key: "date",
-    },
-    {
-      title: "Trạng thái",
-      dataIndex: "status",
-      key: "status",
-      render: (status) => (
-        <StatusTag 
-          color={status === "Đã tiêm" ? "green" : "orange"}
-          icon={status === "Đã tiêm" ? <CheckCircleOutlined /> : <ClockCircleOutlined />}
-        >
-          {status || "Chưa cập nhật"}
-        </StatusTag>
-      ),
-    },
-  ];
-
-  const healthCheckColumns = [
-    {
-      title: "Ngày kiểm tra",
-      dataIndex: "date",
-      key: "date",
-    },
-    {
-      title: "Kết quả",
-      dataIndex: "result",
-      key: "result",
-      render: (result) => (
-        <StatusTag 
-          color={result === "Bình thường" ? "green" : "orange"}
-          icon={result === "Bình thường" ? <CheckCircleOutlined /> : <WarningOutlined />}
-        >
-          {result || "Chưa cập nhật"}
-        </StatusTag>
-      ),
-    },
-  ];
-
   return (
-    <div style={{ maxWidth: 800, margin: "auto", padding: 20 }}>
-      <StyledCard>
-        <HeaderSection>
-          <IconWrapper>
-            <UserOutlined />
-          </IconWrapper>
-          <Title level={2} style={{ color: "white", margin: 0 }}>{fullName}</Title>
-        </HeaderSection>
+    <div className="max-w-7xl mx-auto p-6">
+      <Card className="shadow-lg rounded-lg overflow-hidden">
+        <div className="bg-gradient-to-r from-blue-600 to-blue-800 text-white p-8 rounded-t-lg">
+          <div className="flex items-center justify-between">
+            <div>
+              <Title level={2} className="text-white mb-2">{fullName}</Title>
+              <div className="flex items-center space-x-4 text-blue-100">
+                <span className="flex items-center">
+                  <CalendarOutlined className="mr-2" />
+                  {dob}
+                </span>
+                <span className="flex items-center">
+                  <UserOutlined className="mr-2" />
+                  Học sinh
+                </span>
+              </div>
+            </div>
+            <div className="text-right">
+              <div className="text-2xl font-bold">{vaccinationRate.toFixed(0)}%</div>
+              <div className="text-blue-100">Tỷ lệ tiêm chủng</div>
+            </div>
+          </div>
+        </div>
 
-        <Space direction="vertical" size="large" style={{ width: "100%" }}>
-          <Row gutter={[16, 16]}>
+        <div className="p-6">
+          <Row gutter={[24, 24]} className="mb-8">
             <Col span={12}>
-              <StyledCard>
+              <Card className="h-full">
                 <Statistic
-                  title="Tỷ lệ tiêm chủng"
-                  value={vaccinationRate}
-                  precision={1}
+                  title="Tình trạng sức khỏe"
+                  value={healthCheckRate}
                   suffix="%"
-                  prefix={<SafetyOutlined />}
+                  valueStyle={{ color: healthCheckRate >= 80 ? '#3f8600' : '#cf1322' }}
+                  prefix={healthCheckRate >= 80 ? <CheckCircleOutlined /> : <WarningOutlined />}
                 />
-                <Progress percent={vaccinationRate} status="active" />
-              </StyledCard>
+                <Progress percent={healthCheckRate} status={healthCheckRate >= 80 ? "success" : "exception"} />
+              </Card>
             </Col>
             <Col span={12}>
-              <StyledCard>
+              <Card className="h-full">
                 <Statistic
-                  title="Tỷ lệ sức khỏe tốt"
-                  value={healthCheckRate}
-                  precision={1}
+                  title="Tiêm chủng"
+                  value={vaccinationRate}
                   suffix="%"
-                  prefix={<HeartOutlined />}
+                  valueStyle={{ color: vaccinationRate >= 80 ? '#3f8600' : '#cf1322' }}
+                  prefix={vaccinationRate >= 80 ? <CheckCircleOutlined /> : <WarningOutlined />}
                 />
-                <Progress percent={healthCheckRate} status="active" />
-              </StyledCard>
+                <Progress percent={vaccinationRate} status={vaccinationRate >= 80 ? "success" : "exception"} />
+              </Card>
             </Col>
           </Row>
 
-          <StyledCard title="Thông tin cơ bản" bordered={false}>
-            <Table
-              columns={basicInfoColumns}
-              dataSource={basicInfoData}
-              pagination={false}
-              showHeader={false}
-            />
-          </StyledCard>
-
-          <StyledCard 
-            title={
-              <Space>
-                <SafetyOutlined />
-                Tiêm chủng
-              </Space>
-            } 
-            bordered={false}
-          >
-            {vaccinations.length === 0 ? (
-              <Text type="secondary">Chưa có dữ liệu tiêm chủng.</Text>
-            ) : (
+          <Space direction="vertical" size="large" className="w-full">
+            <Card title={
+              <div className="flex items-center text-lg font-semibold">
+                <MedicineBoxOutlined className="mr-2" />
+                Thông tin sức khỏe cơ bản
+              </div>
+            }>
               <Table
-                columns={vaccinationColumns}
-                dataSource={vaccinations.map((vac, idx) => ({
-                  ...vac,
-                  key: idx,
-                  vaccineName: vac.vaccineName || vac.vaccine || "Chưa cập nhật",
-                }))}
+                columns={[
+                  { title: 'Chỉ số', dataIndex: 'name', key: 'name' },
+                  { title: 'Giá trị', dataIndex: 'value', key: 'value' },
+                ]}
+                dataSource={[
+                  { key: '1', name: 'Thị lực', value: vision || 'Chưa cập nhật' },
+                  { key: '2', name: 'Thính lực', value: hearing || 'Chưa cập nhật' },
+                  { key: '3', name: 'Dị ứng', value: allergies?.join(', ') || 'Không có' },
+                  { key: '4', name: 'Bệnh mãn tính', value: chronicDiseases?.join(', ') || 'Không có' },
+                ]}
                 pagination={false}
+                className="w-full"
               />
-            )}
-          </StyledCard>
+            </Card>
 
-          <StyledCard 
-            title={
-              <Space>
-                <HeartOutlined />
-                Kiểm tra sức khỏe định kỳ
-              </Space>
-            } 
-            bordered={false}
-          >
-            {healthChecks.length === 0 ? (
-              <Text type="secondary">Chưa có dữ liệu kiểm tra sức khỏe.</Text>
-            ) : (
-              <Table
-                columns={healthCheckColumns}
-                dataSource={healthChecks.map((check, idx) => ({
-                  ...check,
-                  key: idx,
-                }))}
-                pagination={false}
-              />
-            )}
-          </StyledCard>
-        </Space>
-      </StyledCard>
+            <Card title={
+              <div className="flex items-center text-lg font-semibold">
+                <SafetyOutlined className="mr-2" />
+                Lịch sử tiêm chủng
+              </div>
+            }>
+              {vaccinations.length === 0 ? (
+                <div className="text-center text-gray-500 py-4">
+                  Chưa có dữ liệu tiêm chủng
+                </div>
+              ) : (
+                <Table
+                  columns={[
+                    { title: 'Vaccine', dataIndex: 'vaccineName', key: 'vaccineName' },
+                    { title: 'Ngày tiêm', dataIndex: 'date', key: 'date' },
+                    { title: 'Trạng thái', dataIndex: 'status', key: 'status',
+                      render: (status) => (
+                        <Tag color={status === 'Đã tiêm' ? 'success' : 'warning'}>
+                          {status}
+                        </Tag>
+                      )
+                    },
+                  ]}
+                  dataSource={vaccinations}
+                  pagination={false}
+                />
+              )}
+            </Card>
+
+            <Card title={
+              <div className="flex items-center text-lg font-semibold">
+                <HeartOutlined className="mr-2" />
+                Lịch sử khám sức khỏe
+              </div>
+            }>
+              {healthChecks.length === 0 ? (
+                <div className="text-center text-gray-500 py-4">
+                  Chưa có dữ liệu khám sức khỏe
+                </div>
+              ) : (
+                <Table
+                  columns={[
+                    { title: 'Ngày khám', dataIndex: 'date', key: 'date' },
+                    { title: 'Kết quả', dataIndex: 'result', key: 'result',
+                      render: (result) => (
+                        <Tag color={result === 'Bình thường' ? 'success' : 'warning'}>
+                          {result}
+                        </Tag>
+                      )
+                    },
+                    { title: 'Ghi chú', dataIndex: 'notes', key: 'notes' },
+                  ]}
+                  dataSource={healthChecks}
+                  pagination={false}
+                />
+              )}
+            </Card>
+          </Space>
+        </div>
+      </Card>
     </div>
   );
 }
