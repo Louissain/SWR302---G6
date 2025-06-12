@@ -30,6 +30,8 @@ import {
 } from "@ant-design/icons";
 import styled from "styled-components";
 import moment from 'moment';
+import { useAuth } from '../../hooks/useAuth';
+import { getChildrenByParentEmail } from '../../data/mockData';
 
 const { Title, Text } = Typography;
 const { TextArea } = Input;
@@ -99,6 +101,33 @@ const healthCheckResults = ['Bình thường', 'Cần theo dõi', 'Bất thườ
 function StudentProfile() {
   const [profile, setProfile] = useState(initialProfile);
   const [form] = Form.useForm();
+  const { currentUser, isLoggedIn } = useAuth();
+  const [children, setChildren] = useState([]);
+  const [selectedChild, setSelectedChild] = useState(null);
+
+  // Kiểm tra nếu là phụ huynh và lấy danh sách con
+  useEffect(() => {
+    if (isLoggedIn && currentUser && currentUser.role === 'parent') {
+      const childrenList = getChildrenByParentEmail(currentUser.email);
+      setChildren(childrenList);
+    }
+  }, [currentUser, isLoggedIn]);
+
+  const handleChildSelect = (value) => {
+    const child = children.find(c => c.studentId === value);
+    setSelectedChild(child);
+    
+    // Tự động điền thông tin của học sinh đã chọn
+    if (child) {
+      form.setFieldsValue({
+        fullName: child.name
+      });
+      setProfile(prev => ({
+        ...prev,
+        fullName: child.name
+      }));
+    }
+  };
 
   // Set form initial values when profile changes (e.g., loading existing data)
   useEffect(() => {
@@ -177,13 +206,27 @@ function StudentProfile() {
       healthChecks: prev.healthChecks.filter((_, i) => i !== index),
     }));
   };
-
   // Hàm submit (ở đây tạm thời chỉ log ra console)
   const handleSubmit = (values) => {
-     // The profile state should already be updated via onValuesChange and individual handlers
-     // profile state now holds the most current formatted data
-    console.log("Submitted profile:", profile);
-    alert("Lưu hồ sơ thành công!");
+    // Bao gồm thông tin học sinh đã chọn nếu là phụ huynh
+    const submissionData = {
+      ...profile,
+      ...values,
+      studentInfo: selectedChild ? {
+        studentId: selectedChild.studentId,
+        name: selectedChild.name,
+        class: selectedChild.class
+      } : null,
+      parentInfo: currentUser && currentUser.role === 'parent' ? {
+        parentName: currentUser.name,
+        parentEmail: currentUser.email,
+        parentPhone: currentUser.phone
+      } : null,
+      submissionDate: moment().format('DD/MM/YYYY HH:mm')
+    };
+    
+    console.log("Submitted health profile:", submissionData);
+    alert(`Lưu hồ sơ sức khỏe ${selectedChild ? `cho ${selectedChild.name}` : ''} thành công!`);
     // TODO: Integrate API call to save profile
   };
 
@@ -201,17 +244,58 @@ function StudentProfile() {
           // Convert date strings to moment objects for initial values if necessary
           dob: initialProfile.dob ? moment(initialProfile.dob) : null,
         }}
-      >
-        <StyledCard title="Thông tin cơ bản" extra={<MedicineBoxOutlined style={{ color: '#1890ff' }} />}>
+      >        <StyledCard title="Thông tin cơ bản" extra={<MedicineBoxOutlined style={{ color: '#1890ff' }} />}>
+          {/* Hiển thị thông tin phụ huynh nếu đăng nhập với tài khoản phụ huynh */}
+          {isLoggedIn && currentUser && currentUser.role === 'parent' && (
+            <div style={{ marginBottom: '20px', padding: '10px', backgroundColor: '#f6ffed', border: '1px solid #b7eb8f', borderRadius: '6px' }}>
+              <strong>Phụ huynh:</strong> {currentUser.name} | <strong>Email:</strong> {currentUser.email}
+            </div>
+          )}
+          
           <Row gutter={[24, 16]}>
             <Col xs={24} sm={24} md={12}>
-              <Form.Item
-                name="fullName"
-                label="Họ và tên"
-                rules={[{ required: true, message: 'Vui lòng nhập họ và tên!' }]}
-              >
-                <Input placeholder="Nhập họ và tên" />
-              </Form.Item>
+              {/* Nếu là phụ huynh thì hiển thị dropdown chọn con, nếu không thì hiển thị input */}
+              {isLoggedIn && currentUser && currentUser.role === 'parent' ? (
+                <Form.Item
+                  name="studentId"
+                  label="Chọn học sinh"
+                  rules={[{ required: true, message: 'Vui lòng chọn học sinh!' }]}
+                >
+                  <Select 
+                    placeholder="Chọn con em của bạn"
+                    onChange={handleChildSelect}
+                    style={{ width: '100%' }}
+                  >
+                    {children.map(child => (
+                      <Option key={child.studentId} value={child.studentId}>
+                        {child.name} - {child.class} (Mã: {child.studentId})
+                      </Option>
+                    ))}
+                  </Select>
+                </Form.Item>
+              ) : (
+                <Form.Item
+                  name="fullName"
+                  label="Họ và tên"
+                  rules={[{ required: true, message: 'Vui lòng nhập họ và tên!' }]}
+                >
+                  <Input placeholder="Nhập họ và tên" />
+                </Form.Item>
+              )}
+              
+              {/* Hiển thị trường họ và tên chỉ đọc nếu là phụ huynh và đã chọn con */}
+              {isLoggedIn && currentUser && currentUser.role === 'parent' && selectedChild && (
+                <Form.Item
+                  name="fullName"
+                  label="Họ và tên"
+                >
+                  <Input 
+                    disabled
+                    style={{ backgroundColor: '#f5f5f5' }}
+                    value={selectedChild.name}
+                  />
+                </Form.Item>
+              )}
             </Col>
             <Col xs={24} sm={24} md={12}>
               <Form.Item

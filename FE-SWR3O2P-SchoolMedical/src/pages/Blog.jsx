@@ -169,34 +169,30 @@ export default function Blog() {
 
       {/* Search and Categories Section */}
       <div className="mb-16 bg-white p-6 sm:p-8 rounded-2xl shadow-xl border border-gray-100">
-        <Row gutter={[24, 24]} align="middle" justify="center">
-          <Col xs={24} md={16} lg={14}>
-            <Search
-              placeholder="Tìm kiếm bài viết, ví dụ: Dinh dưỡng, tâm lý học..."
-              allowClear
-              enterButton={<SearchOutlined />}
-              size="large"
-              className="w-full rounded-lg overflow-hidden"
-            />
-          </Col>
-          <Col xs={24} md={8} lg={10}>
-            <div className="flex flex-wrap gap-3 justify-center md:justify-end mt-4 md:mt-0">
-              {blogCategories.map(category => (
-                <Tooltip key={category.id} title={category.description}>
-                  <Tag
-                    color={category.color}
-                    className="cursor-pointer hover:scale-105 transition-transform duration-200 ease-in-out text-base px-4 py-2 rounded-full shadow-sm hover:shadow-md"
-                  >
-                    <Space>
-                      {category.icon}
-                      <span>{category.name}</span>
-                    </Space>
-                  </Tag>
-                </Tooltip>
-              ))}
-            </div>
-          </Col>
-        </Row>
+        <div className="flex flex-col gap-6">
+          <Search
+            placeholder="Tìm kiếm bài viết, ví dụ: Dinh dưỡng, tâm lý học..."
+            allowClear
+            enterButton={<SearchOutlined />}
+            size="large"
+            className="w-full rounded-lg overflow-hidden"
+          />
+          <div className="flex flex-wrap gap-3 justify-center">
+            {blogCategories.map(category => (
+              <Tooltip key={category.id} title={category.description}>
+                <Tag
+                  color={category.color}
+                  className="cursor-pointer hover:scale-105 transition-transform duration-200 ease-in-out text-base px-4 py-2 rounded-full shadow-sm hover:shadow-md"
+                >
+                  <Space>
+                    {category.icon}
+                    <span>{category.name}</span>
+                  </Space>
+                </Tag>
+              </Tooltip>
+            ))}
+          </div>
+        </div>
       </div>
 
       {/* Featured Posts Section */}
@@ -275,14 +271,6 @@ export default function Blog() {
             </Col>
           ))}
         </Row>
-      </div>
-
-      {/* All Blog Posts Section */}
-      <div className="mb-16">
-        <Title level={3} className="text-3xl sm:text-4xl font-bold mb-10 text-gray-800 text-center">
-          Tất cả Bài viết
-        </Title>
-        <BlogList />
       </div>
     </div>
   );
